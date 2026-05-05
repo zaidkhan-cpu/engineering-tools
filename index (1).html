@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Engineering Toolbox — Free Industrial Engineering Calculators</title>
+<meta name="description" content="Free online industrial engineering calculators. OEE, Takt Time, Cp/Cpk, EOQ, Safety Stock, PERT and more. Built for manufacturing and production engineers.">
+<meta name="keywords" content="industrial engineering calculators, OEE calculator, takt time calculator, lean manufacturing tools, manufacturing KPI, free engineering tools">
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #0f1117;
+  color: #e2e8f0;
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+header {
+  background: #161b27;
+  border-bottom: 1px solid #2d3748;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.logo { font-size: 16px; font-weight: 700; color: #f6ad55; letter-spacing: .04em; text-decoration: none; }
+.logo span { color: #e2e8f0; }
+
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+
+.hero { text-align: center; padding: 60px 0 48px; }
+.tag { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #f6ad55; background: rgba(246,173,85,0.1); border: 1px solid rgba(246,173,85,0.3); border-radius: 20px; padding: 4px 14px; margin-bottom: 20px; }
+h1 { font-size: clamp(28px,5vw,46px); font-weight: 700; margin-bottom: 16px; line-height: 1.15; }
+h1 em { color: #f6ad55; font-style: normal; }
+.sub { font-size: 16px; color: #718096; max-width: 520px; margin: 0 auto 36px; }
+
+.stats { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; }
+.stat { text-align: center; }
+.stat-num { font-size: 28px; font-weight: 700; color: #f6ad55; }
+.stat-label { font-size: 12px; color: #718096; margin-top: 2px; }
+
+.search-wrap { margin: 40px 0 24px; position: relative; }
+.search-wrap input {
+  width: 100%; background: #161b27; border: 1px solid #2d3748; border-radius: 10px;
+  padding: 14px 18px 14px 46px; font-size: 15px; color: #e2e8f0; outline: none; transition: border-color .2s;
+}
+.search-wrap input:focus { border-color: #f6ad55; }
+.search-wrap input::placeholder { color: #4a5568; }
+.search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #4a5568; pointer-events: none; }
+
+.filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+.filter-btn { font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 20px; border: 1px solid #2d3748; background: transparent; color: #718096; cursor: pointer; transition: all .15s; }
+.filter-btn:hover { border-color: #f6ad55; color: #f6ad55; }
+.filter-btn.active { background: rgba(246,173,85,0.12); border-color: rgba(246,173,85,0.4); color: #f6ad55; }
+
+.section-label { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #718096; margin-bottom: 16px; }
+
+.tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap: 14px; margin-bottom: 48px; }
+
+.tool-card {
+  background: #161b27; border: 1px solid #2d3748; border-radius: 12px;
+  padding: 20px; text-decoration: none; display: flex; flex-direction: column; gap: 10px;
+  transition: all .2s; position: relative; overflow: hidden;
+}
+.tool-card:hover { border-color: #f6ad55; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+
+.tool-card-top { display: flex; align-items: center; justify-content: space-between; }
+.tool-icon-wrap { width: 42px; height: 42px; border-radius: 10px; background: #1a202c; border: 1px solid #2d3748; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+
+.live-badge { font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 8px; border-radius: 20px; background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
+.soon-badge { font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 8px; border-radius: 20px; background: rgba(113,128,150,0.12); color: #718096; border: 1px solid #2d3748; }
+
+.tool-name { font-size: 15px; font-weight: 700; color: #e2e8f0; }
+.tool-desc { font-size: 13px; color: #718096; line-height: 1.5; }
+.tool-tag { font-size: 11px; font-weight: 500; color: #4a5568; margin-top: 4px; }
+
+.tool-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, #f6ad55, #ed8936); opacity: 0; transition: opacity .2s; }
+.tool-card:hover::after { opacity: 1; }
+
+.ad-slot { background: #161b27; border: 1px dashed #2d3748; border-radius: 10px; padding: 20px; text-align: center; font-size: 12px; font-family: monospace; color: #4a5568; margin: 0 0 32px; }
+
+.about { background: #161b27; border: 1px solid #2d3748; border-radius: 14px; padding: 32px; margin-bottom: 40px; }
+.about h2 { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+.about p { font-size: 14px; color: #a0aec0; margin-bottom: 12px; line-height: 1.8; }
+.about p:last-child { margin-bottom: 0; }
+.about strong { color: #e2e8f0; }
+
+footer { border-top: 1px solid #2d3748; padding: 28px 20px; text-align: center; }
+footer p { font-size: 12px; color: #4a5568; line-height: 1.8; }
+footer a { color: #718096; text-decoration: none; }
+footer a:hover { color: #f6ad55; }
+
+@media (max-width: 560px) {
+  .tools-grid { grid-template-columns: 1fr; }
+  .stats { gap: 20px; }
+  .about { padding: 20px 16px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">&#9881; ENG<span>TOOLBOX</span></a>
+</header>
+
+<main>
+<div class="wrap">
+
+  <section class="hero">
+    <div class="tag">Free Industrial Engineering Tools</div>
+    <h1>Calculators Built for<br><em>Real Engineers</em></h1>
+    <p class="sub">Free, fast, no login required. Every tool you need for manufacturing, lean, quality, and supply chain — in one place.</p>
+    <div class="stats">
+      <div class="stat"><div class="stat-num">2</div><div class="stat-label">Tools live now</div></div>
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Free forever</div></div>
+      <div class="stat"><div class="stat-num">0</div><div class="stat-label">Login required</div></div>
+    </div>
+  </section>
+
+  <div class="search-wrap">
+    <span class="search-icon">&#128269;</span>
+    <input type="text" id="search-input" placeholder="Search tools... (e.g. OEE, takt time, EOQ)" oninput="filterTools()">
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" onclick="setFilter('all', this)">All Tools</button>
+    <button class="filter-btn" onclick="setFilter('lean', this)">Lean Manufacturing</button>
+    <button class="filter-btn" onclick="setFilter('quality', this)">Quality</button>
+    <button class="filter-btn" onclick="setFilter('supply', this)">Supply Chain</button>
+    <button class="filter-btn" onclick="setFilter('project', this)">Project Management</button>
+  </div>
+
+  <div class="ad-slot">&lt;!-- GOOGLE ADSENSE CODE HERE --&gt;</div>
+
+  <div class="section-label" id="grid-label">All Tools</div>
+  <div class="tools-grid" id="tools-grid">
+
+    <a class="tool-card" href="oee-calculator.html" data-cat="lean" data-name="oee overall equipment effectiveness availability performance quality">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap">&#128200;</div>
+        <span class="live-badge">&#9679; Live</span>
+      </div>
+      <div class="tool-name">OEE Calculator</div>
+      <div class="tool-desc">Calculate Overall Equipment Effectiveness from Availability, Performance, and Quality with benchmarks.</div>
+      <div class="tool-tag">Lean Manufacturing</div>
+    </a>
+
+    <a class="tool-card" href="takt-time-calculator.html" data-cat="lean" data-name="takt time production rate demand lean">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap">&#9201;</div>
+        <span class="live-badge">&#9679; Live</span>
+      </div>
+      <div class="tool-name">Takt Time Calculator</div>
+      <div class="tool-desc">Calculate production pacing time to match customer demand. Essential for lean line balancing.</div>
+      <div class="tool-tag">Lean Manufacturing</div>
+    </a>
+
+    <a class="tool-card" href="cpk-calculator.html" data-cat="quality" data-name="cpk cp process capability spc quality">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap">&#128202;</div>
+        <span class="soon-badge">Coming soon</span>
+      </div>
+      <div class="tool-name">Cp / Cpk Calculator</div>
+      <div class="tool-desc">Measure process capability and performance against specification limits. SPC essential.</div>
+      <div class="tool-tag">Quality Engineering</div>
+    </a>
+
+    <a class="tool-card" href="eoq-calculator.html" data-cat="supply" data-name="eoq economic order quantity inventory cost">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap">&#128230;</div>
+        <span class="soon-badge">Coming soon</span>
+      </div>
+      <div class="tool-name">EOQ Calculator</div>
+      <div class="tool-desc">Find the optimal order quantity that minimises total inventory holding and ordering costs.</div>
+      <div class="tool-tag">Supply Chain</div>
+    </a>
+
+    <a class="tool-card" href="safety-stock-calculator.html" data-cat="supply" data-name="safety stock inventory buffer lead time">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap">&#128737;</div>
+        <span class="soon-badge">Coming soon</span>
+      </div>
+      <div class="tool-name">Safety Stock Calculator</div>
+      <div class="tool-desc">Calculate the right inventory buffer to protect against demand and lead time variability.</div>
+      <div class="tool-tag">Supply Chain</div>
+    </a>
+
+    <a class="tool-card" href="pert-calculator.html" data-cat="project" data-name="pert cpm project duration estimation optimistic pessimistic">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap">&#128197;</div>
+        <span class="soon-badge">Coming soon</span>
+      </div>
+      <div class="tool-name">PERT Calculator</div>
+      <div class="tool-desc">Estimate project task duration using optimistic, most likely, and pessimistic time estimates.</div>
+      <div class="tool-tag">Project Management</div>
+    </a>
+
+    <a class="tool-card" href="cycle-time-calculator.html" data-cat="lean" data-name="cycle time bottleneck throughput production">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap">&#128260;</div>
+        <span class="soon-badge">Coming soon</span>
+      </div>
+      <div class="tool-name">Cycle Time Calculator</div>
+      <div class="tool-desc">Calculate machine and process cycle times with bottleneck identification and throughput analysis.</div>
+      <div class="tool-tag">Lean Manufacturing</div>
+    </a>
+
+    <a class="tool-card" href="break-even-calculator.html" data-cat="quality" data-name="break even point fixed variable cost revenue">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap">&#9878;</div>
+        <span class="soon-badge">Coming soon</span>
+      </div>
+      <div class="tool-name">Break-Even Calculator</div>
+      <div class="tool-desc">Find the production volume at which total revenue equals total costs. Essential for pricing decisions.</div>
+      <div class="tool-tag">Financial Analysis</div>
+    </a>
+
+    <a class="tool-card" href="mcdm-calculator.html" data-cat="quality" data-name="mcdm weighted scoring supplier selection decision">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap">&#9878;</div>
+        <span class="soon-badge">Coming soon</span>
+      </div>
+      <div class="tool-name">Weighted Scoring (MCDM)</div>
+      <div class="tool-desc">Multi-criteria decision tool for supplier selection, project prioritisation, and option ranking.</div>
+      <div class="tool-tag">Decision Analysis</div>
+    </a>
+
+    <a class="tool-card" href="reorder-point-calculator.html" data-cat="supply" data-name="reorder point inventory replenishment stock">
+      <div class="tool-card-top">
+        <div class="tool-icon-wrap">&#128257;</div>
+        <span class="soon-badge">Coming soon</span>
+      </div>
+      <div class="tool-name">Reorder Point Calculator</div>
+      <div class="tool-desc">Calculate when to reorder stock based on demand rate, lead time, and safety stock level.</div>
+      <div class="tool-tag">Supply Chain</div>
+    </a>
+
+  </div>
+
+  <div class="about">
+    <h2>Built by Engineers, for Engineers</h2>
+    <p>Every calculator on this site is based on <strong>standard industrial engineering formulas</strong> — ISO 22400, APICS, TPM, and lean manufacturing principles. No paywalls, no signups, no limits.</p>
+    <p>Whether you're calculating OEE on a shop floor, sizing safety stock for a warehouse, or estimating project duration with PERT — these tools give you instant, accurate answers you can use immediately.</p>
+    <p>New tools are added regularly. Bookmark this page and check back soon.</p>
+  </div>
+
+  <div class="ad-slot">&lt;!-- SECOND ADSENSE UNIT HERE --&gt;</div>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>
+      <strong style="color:#718096">Engineering Toolbox</strong> — Free industrial engineering calculators<br>
+      Formulas based on ISO 22400-2, APICS, and lean manufacturing standards.
+    </p>
+  </div>
+</footer>
+
+<script>
+  var tools = document.querySelectorAll('.tool-card');
+
+  function setFilter(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    tools.forEach(function(t){
+      t.style.display = (cat === 'all' || t.dataset.cat === cat) ? 'flex' : 'none';
+    });
+    document.getElementById('search-input').value = '';
+  }
+
+  function filterTools() {
+    var q = document.getElementById('search-input').value.toLowerCase();
+    document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelector('.filter-btn').classList.add('active');
+    tools.forEach(function(t){
+      t.style.display = (t.dataset.name || '').indexOf(q) > -1 ? 'flex' : 'none';
+    });
+  }
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"Engineering Toolbox","description":"Free online industrial engineering calculators for manufacturing, lean, quality, and supply chain professionals.","url":"https://bldmatrix.github.io/engineering-tools/"}
+</script>
+
+</body>
+</html>
