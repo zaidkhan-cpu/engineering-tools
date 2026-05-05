@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EOQ Calculator — Free Economic Order Quantity Calculator Online</title>
+<meta name="description" content="Calculate Economic Order Quantity (EOQ) instantly. Enter demand, ordering cost, and holding cost to find your optimal order quantity. Free supply chain calculator with total cost breakdown.">
+<meta name="keywords" content="EOQ calculator, economic order quantity calculator, EOQ formula, inventory management calculator, optimal order quantity, supply chain calculator online">
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #0f1117;
+  color: #e2e8f0;
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+header {
+  background: #161b27;
+  border-bottom: 1px solid #2d3748;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo { font-size: 15px; font-weight: 700; color: #f6ad55; letter-spacing: .04em; text-decoration: none; }
+nav { display: flex; gap: 6px; flex-wrap: wrap; }
+nav a { font-size: 12px; color: #718096; text-decoration: none; padding: 4px 10px; border-radius: 6px; border: 1px solid transparent; transition: all .15s; }
+nav a:hover { border-color: #2d3748; color: #e2e8f0; background: #1a202c; }
+nav a.active { color: #f6ad55; border-color: rgba(246,173,85,0.3); background: rgba(246,173,85,0.08); }
+
+.wrap { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+
+.hero { text-align: center; padding: 48px 0 32px; }
+.tag { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #f6ad55; background: rgba(246,173,85,0.1); border: 1px solid rgba(246,173,85,0.3); border-radius: 20px; padding: 4px 14px; margin-bottom: 18px; }
+h1 { font-size: clamp(26px,5vw,40px); font-weight: 700; margin-bottom: 12px; line-height: 1.2; }
+h1 em { color: #f6ad55; font-style: normal; }
+.sub { font-size: 15px; color: #718096; max-width: 500px; margin: 0 auto; }
+
+.card { background: #161b27; border: 1px solid #2d3748; border-radius: 14px; padding: 28px; margin-bottom: 20px; }
+
+/* RESULT BOX */
+.result-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px; }
+.result-item { background: #1a202c; border: 1px solid #2d3748; border-radius: 10px; padding: 16px; text-align: center; }
+.result-item.primary { background: rgba(246,173,85,0.08); border-color: rgba(246,173,85,0.3); }
+.result-label { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #718096; margin-bottom: 6px; }
+.result-item.primary .result-label { color: #f6ad55; }
+.result-val { font-size: 28px; font-weight: 800; color: #e2e8f0; line-height: 1; }
+.result-item.primary .result-val { font-size: 36px; color: #f6ad55; }
+.result-sub { font-size: 11px; color: #4a5568; margin-top: 4px; }
+
+/* FORMULA */
+.formula { background: #1a202c; border: 1px solid #2d3748; border-radius: 8px; padding: 12px 16px; font-family: 'Courier New', monospace; font-size: 13px; color: #718096; text-align: center; margin-bottom: 24px; line-height: 2; }
+.formula b { color: #e2e8f0; }
+.formula .hi { color: #f6ad55; }
+
+/* INPUTS */
+.inputs { display: flex; flex-direction: column; gap: 18px; }
+.input-group { display: flex; flex-direction: column; gap: 6px; }
+.input-label { font-size: 13px; font-weight: 600; color: #e2e8f0; display: flex; align-items: center; gap: 8px; }
+.input-desc { font-size: 11px; color: #4a5568; }
+.input-row { display: flex; gap: 10px; align-items: center; }
+
+input[type="number"] {
+  flex: 1; background: #1a202c; border: 1px solid #2d3748; border-radius: 8px;
+  padding: 12px 14px; font-size: 16px; font-weight: 600; color: #f6ad55;
+  outline: none; transition: border-color .2s; -moz-appearance: textfield;
+  width: 100%;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+input[type="number"]:focus { border-color: #f6ad55; }
+
+.currency-tag {
+  background: #1a202c; border: 1px solid #2d3748; border-radius: 8px;
+  padding: 12px 14px; font-size: 14px; color: #718096; white-space: nowrap;
+}
+
+select {
+  background: #1a202c; border: 1px solid #2d3748; border-radius: 8px;
+  padding: 12px 14px; font-size: 14px; color: #e2e8f0; outline: none; cursor: pointer;
+}
+select:focus { border-color: #f6ad55; }
+
+/* COST BREAKDOWN */
+.breakdown { display: flex; flex-direction: column; gap: 10px; }
+.breakdown-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: #1a202c; border: 1px solid #2d3748; border-radius: 8px; }
+.breakdown-label { font-size: 13px; color: #a0aec0; }
+.breakdown-val { font-size: 15px; font-weight: 700; color: #e2e8f0; font-family: 'Courier New', monospace; }
+.breakdown-row.total { background: rgba(246,173,85,0.08); border-color: rgba(246,173,85,0.3); }
+.breakdown-row.total .breakdown-label { color: #f6ad55; font-weight: 600; }
+.breakdown-row.total .breakdown-val { color: #f6ad55; font-size: 18px; }
+
+/* VISUAL BAR */
+.cost-bar-wrap { margin-top: 16px; }
+.cost-bar-label { display: flex; justify-content: space-between; font-size: 11px; color: #718096; margin-bottom: 6px; }
+.cost-bar-track { height: 12px; background: #1a202c; border-radius: 6px; overflow: hidden; display: flex; }
+.bar-order { height: 100%; background: #f6ad55; border-radius: 6px 0 0 6px; transition: width .5s; }
+.bar-hold  { height: 100%; background: #38b2ac; border-radius: 0 6px 6px 0; transition: width .5s; }
+.bar-legend { display: flex; gap: 16px; margin-top: 8px; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #718096; }
+.legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+/* PRESETS */
+.presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.preset-btn { font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 6px; border: 1px solid #2d3748; background: transparent; color: #718096; cursor: pointer; transition: all .15s; }
+.preset-btn:hover { border-color: #f6ad55; color: #f6ad55; background: rgba(246,173,85,0.06); }
+
+/* AD */
+.ad-slot { background: #161b27; border: 1px dashed #2d3748; border-radius: 10px; padding: 20px; text-align: center; font-size: 12px; font-family: monospace; color: #4a5568; margin: 20px 0; }
+
+/* ARTICLE */
+article { background: #161b27; border: 1px solid #2d3748; border-radius: 14px; padding: 32px; margin-bottom: 20px; }
+article h2 { font-size: 22px; font-weight: 700; margin-bottom: 14px; }
+article h3 { font-size: 16px; font-weight: 600; margin: 22px 0 10px; }
+article p { font-size: 14px; color: #a0aec0; margin-bottom: 14px; line-height: 1.8; }
+article ul { padding-left: 18px; margin-bottom: 14px; }
+article li { font-size: 14px; color: #a0aec0; margin-bottom: 6px; }
+article strong { color: #e2e8f0; }
+
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 13px; }
+thead th { background: #1a202c; color: #718096; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 10px 12px; text-align: left; border-bottom: 1px solid #2d3748; }
+tbody td { padding: 10px 12px; color: #a0aec0; border-bottom: 1px solid #2d3748; }
+tbody td:first-child { color: #e2e8f0; font-weight: 600; }
+tbody tr:last-child td { border-bottom: none; }
+
+/* RELATED */
+.tools-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(190px,1fr)); gap: 10px; margin-bottom: 36px; }
+.tool-link { background: #161b27; border: 1px solid #2d3748; border-radius: 10px; padding: 14px 16px; text-decoration: none; display: flex; align-items: center; gap: 12px; color: #e2e8f0; transition: border-color .15s; }
+.tool-link:hover { border-color: #f6ad55; background: rgba(246,173,85,0.06); }
+.tool-icon { font-size: 22px; width: 36px; text-align: center; }
+.tool-name { font-size: 13px; font-weight: 600; }
+.tool-desc { font-size: 11px; color: #718096; }
+
+.section-label { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #718096; margin-bottom: 14px; }
+
+footer { border-top: 1px solid #2d3748; padding: 28px 20px; text-align: center; }
+footer p { font-size: 12px; color: #4a5568; line-height: 1.8; }
+footer a { color: #718096; text-decoration: none; }
+footer a:hover { color: #f6ad55; }
+
+@media (max-width: 560px) {
+  .card { padding: 18px 14px; }
+  .result-grid { grid-template-columns: 1fr; }
+  article { padding: 20px 16px; }
+  nav { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">&#9881; ENGTOOLBOX</a>
+  <nav>
+    <a href="oee-calculator.html">OEE</a>
+    <a href="takt-time-calculator.html">Takt Time</a>
+    <a href="cpk-calculator.html">Cp/Cpk</a>
+    <a href="eoq-calculator.html" class="active">EOQ</a>
+    <a href="index.html">All Tools</a>
+  </nav>
+</header>
+
+<main>
+<div class="wrap">
+
+  <section class="hero">
+    <div class="tag">Supply Chain Calculator</div>
+    <h1>EOQ Calculator<br><em>Economic Order Quantity</em></h1>
+    <p class="sub">Find the optimal order quantity that minimises your total inventory costs. Instant results with full cost breakdown.</p>
+  </section>
+
+  <!-- CALCULATOR CARD -->
+  <div class="card">
+
+    <!-- Results -->
+    <div class="result-grid">
+      <div class="result-item primary">
+        <div class="result-label">Optimal Order Qty</div>
+        <div class="result-val" id="r-eoq">200</div>
+        <div class="result-sub">units per order</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">Orders per Year</div>
+        <div class="result-val" id="r-orders">10</div>
+        <div class="result-sub">order cycles</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">Reorder Every</div>
+        <div class="result-val" id="r-cycle">36</div>
+        <div class="result-sub">days</div>
+      </div>
+    </div>
+
+    <!-- Formula -->
+    <div class="formula">
+      <b>EOQ</b> = &#8730;( 2 &times; <span class="hi" id="f-d">2000</span> &times; <span class="hi" id="f-s">10</span> &divide; <span class="hi" id="f-h">1.00</span> ) = <b id="f-result">200 units</b>
+    </div>
+
+    <!-- Quick Presets -->
+    <div class="section-label">Quick Examples</div>
+    <div class="presets">
+      <button class="preset-btn" onclick="setPreset(2000,10,1)">Small retailer</button>
+      <button class="preset-btn" onclick="setPreset(10000,50,2)">Medium warehouse</button>
+      <button class="preset-btn" onclick="setPreset(50000,200,5)">Large distributor</button>
+      <button class="preset-btn" onclick="setPreset(500,100,0.5)">High-cost item</button>
+    </div>
+
+    <!-- Inputs -->
+    <div class="inputs">
+
+      <div class="input-group">
+        <div class="input-label">Annual Demand (D)</div>
+        <div class="input-desc">Total units required per year</div>
+        <div class="input-row">
+          <input type="number" id="inp-d" value="2000" min="1" oninput="calc()">
+          <div class="currency-tag">units/year</div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-label">Ordering Cost (S)</div>
+        <div class="input-desc">Cost per order placed — admin, shipping, processing</div>
+        <div class="input-row">
+          <div class="currency-tag">€</div>
+          <input type="number" id="inp-s" value="10" min="0.01" step="0.01" oninput="calc()">
+          <div class="currency-tag">per order</div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-label">Holding Cost (H)</div>
+        <div class="input-desc">Cost to hold one unit for one year — storage, insurance, capital</div>
+        <div class="input-row">
+          <div class="currency-tag">€</div>
+          <input type="number" id="inp-h" value="1" min="0.01" step="0.01" oninput="calc()">
+          <div class="currency-tag">per unit/year</div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-label">Unit Cost (optional)</div>
+        <div class="input-desc">Cost per unit — used to calculate total purchase cost</div>
+        <div class="input-row">
+          <div class="currency-tag">€</div>
+          <input type="number" id="inp-c" value="5" min="0" step="0.01" oninput="calc()">
+          <div class="currency-tag">per unit</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- COST BREAKDOWN CARD -->
+  <div class="card">
+    <div class="section-label">Annual Cost Breakdown</div>
+    <div class="breakdown">
+      <div class="breakdown-row">
+        <div class="breakdown-label">&#128230; Annual Ordering Cost</div>
+        <div class="breakdown-val" id="b-ordering">€100.00</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="breakdown-label">&#128447; Annual Holding Cost</div>
+        <div class="breakdown-val" id="b-holding">€100.00</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="breakdown-label">&#128181; Annual Purchase Cost</div>
+        <div class="breakdown-val" id="b-purchase">€10,000.00</div>
+      </div>
+      <div class="breakdown-row total">
+        <div class="breakdown-label">Total Annual Inventory Cost</div>
+        <div class="breakdown-val" id="b-total">€10,200.00</div>
+      </div>
+    </div>
+
+    <!-- Cost bar -->
+    <div class="cost-bar-wrap">
+      <div class="cost-bar-label">
+        <span>Ordering cost</span>
+        <span>Holding cost</span>
+      </div>
+      <div class="cost-bar-track">
+        <div class="bar-order" id="bar-order" style="width:50%"></div>
+        <div class="bar-hold"  id="bar-hold"  style="width:50%"></div>
+      </div>
+      <div class="bar-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#f6ad55"></div>Ordering cost</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#38b2ac"></div>Holding cost</div>
+      </div>
+      <p style="font-size:12px;color:#4a5568;margin-top:10px" id="balance-msg">At EOQ, ordering and holding costs are perfectly balanced — this is the cost minimum.</p>
+    </div>
+  </div>
+
+  <div class="ad-slot">&lt;!-- GOOGLE ADSENSE CODE HERE --&gt;</div>
+
+  <!-- ARTICLE -->
+  <article>
+    <h2>What is Economic Order Quantity (EOQ)?</h2>
+    <p><strong>Economic Order Quantity (EOQ)</strong> is the ideal order quantity a company should purchase to minimise its total inventory costs — balancing the cost of ordering too frequently against the cost of holding too much stock. It was developed by Ford W. Harris in 1913 and remains a cornerstone of supply chain management.</p>
+
+    <h3>The EOQ Formula</h3>
+    <p><strong>EOQ = &radic;( 2DS / H )</strong></p>
+    <ul>
+      <li><strong>D</strong> — Annual demand (units per year)</li>
+      <li><strong>S</strong> — Ordering cost per order (€ per order)</li>
+      <li><strong>H</strong> — Holding cost per unit per year (€ per unit/year)</li>
+    </ul>
+    <p>The formula finds the point where ordering costs and holding costs are exactly equal — the mathematical minimum of total inventory cost.</p>
+
+    <h3>Ordering Cost vs Holding Cost</h3>
+    <table>
+      <thead><tr><th>Cost Type</th><th>What's Included</th><th>Behaviour</th></tr></thead>
+      <tbody>
+        <tr><td>Ordering Cost</td><td>Admin, processing, shipping, inspection per order</td><td>Decreases as order size increases</td></tr>
+        <tr><td>Holding Cost</td><td>Storage, insurance, obsolescence, capital tied up</td><td>Increases as order size increases</td></tr>
+        <tr><td>Total Cost</td><td>Sum of both</td><td>U-shaped curve — minimum at EOQ</td></tr>
+      </tbody>
+    </table>
+
+    <h3>EOQ Assumptions and Limitations</h3>
+    <p>The classic EOQ model assumes:</p>
+    <ul>
+      <li>Demand is constant and known throughout the year</li>
+      <li>Lead time is constant and known</li>
+      <li>No quantity discounts apply</li>
+      <li>No stockouts are allowed</li>
+    </ul>
+    <p>In reality, demand fluctuates. This is why EOQ is used alongside <strong>safety stock</strong> and <strong>reorder point</strong> calculations for a complete inventory management system.</p>
+
+    <h3>How to Apply EOQ in Practice</h3>
+    <ul>
+      <li>Calculate EOQ for each SKU independently</li>
+      <li>Review holding costs annually — storage rates change</li>
+      <li>Combine with safety stock to handle demand variability</li>
+      <li>Use reorder point = (average daily demand &times; lead time) + safety stock</li>
+    </ul>
+    <p>Use this free EOQ calculator to quickly find the optimal order quantity for any product, and use the cost breakdown to understand where your inventory budget is going.</p>
+  </article>
+
+  <!-- RELATED -->
+  <div class="section-label" style="margin-bottom:12px">Related Industrial Engineering Calculators</div>
+  <div class="tools-grid">
+    <a class="tool-link" href="oee-calculator.html">
+      <span class="tool-icon">&#128200;</span>
+      <div><div class="tool-name">OEE Calculator</div><div class="tool-desc">Equipment effectiveness</div></div>
+    </a>
+    <a class="tool-link" href="takt-time-calculator.html">
+      <span class="tool-icon">&#9201;</span>
+      <div><div class="tool-name">Takt Time</div><div class="tool-desc">Production pacing</div></div>
+    </a>
+    <a class="tool-link" href="safety-stock-calculator.html">
+      <span class="tool-icon">&#128737;</span>
+      <div><div class="tool-name">Safety Stock</div><div class="tool-desc">Inventory buffer</div></div>
+    </a>
+    <a class="tool-link" href="reorder-point-calculator.html">
+      <span class="tool-icon">&#128257;</span>
+      <div><div class="tool-name">Reorder Point</div><div class="tool-desc">When to reorder</div></div>
+    </a>
+    <a class="tool-link" href="cpk-calculator.html">
+      <span class="tool-icon">&#128202;</span>
+      <div><div class="tool-name">Cp / Cpk</div><div class="tool-desc">Process capability</div></div>
+    </a>
+    <a class="tool-link" href="pert-calculator.html">
+      <span class="tool-icon">&#128197;</span>
+      <div><div class="tool-name">PERT Calculator</div><div class="tool-desc">Project duration</div></div>
+    </a>
+  </div>
+
+  <div class="ad-slot">&lt;!-- SECOND ADSENSE UNIT HERE --&gt;</div>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>
+      <strong style="color:#718096">Engineering Toolbox</strong> — Free industrial engineering calculators<br>
+      <a href="index.html">All Tools</a> &middot; <a href="about.html">About</a>
+    </p>
+    <p style="margin-top:8px">Based on Wilson EOQ model. Always validate with your supply chain team for real purchasing decisions.</p>
+  </div>
+</footer>
+
+<script>
+function fmt(n) {
+  return '€' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function setPreset(d, s, h) {
+  document.getElementById('inp-d').value = d;
+  document.getElementById('inp-s').value = s;
+  document.getElementById('inp-h').value = h;
+  calc();
+}
+
+function calc() {
+  var D = parseFloat(document.getElementById('inp-d').value) || 0;
+  var S = parseFloat(document.getElementById('inp-s').value) || 0;
+  var H = parseFloat(document.getElementById('inp-h').value) || 0.01;
+  var C = parseFloat(document.getElementById('inp-c').value) || 0;
+
+  if (D <= 0 || S <= 0 || H <= 0) return;
+
+  var eoq         = Math.sqrt((2 * D * S) / H);
+  var ordersPerYr = D / eoq;
+  var cycledays   = 365 / ordersPerYr;
+  var orderCost   = ordersPerYr * S;
+  var holdCost    = (eoq / 2) * H;
+  var purchCost   = D * C;
+  var totalCost   = orderCost + holdCost + purchCost;
+
+  document.getElementById('r-eoq').textContent    = Math.round(eoq);
+  document.getElementById('r-orders').textContent = ordersPerYr.toFixed(1);
+  document.getElementById('r-cycle').textContent  = Math.round(cycledays);
+
+  document.getElementById('f-d').textContent      = D;
+  document.getElementById('f-s').textContent      = S.toFixed(2);
+  document.getElementById('f-h').textContent      = H.toFixed(2);
+  document.getElementById('f-result').textContent = Math.round(eoq) + ' units';
+
+  document.getElementById('b-ordering').textContent = fmt(orderCost);
+  document.getElementById('b-holding').textContent  = fmt(holdCost);
+  document.getElementById('b-purchase').textContent = fmt(purchCost);
+  document.getElementById('b-total').textContent    = fmt(totalCost);
+
+  // Bar chart (ordering vs holding only)
+  var total2 = orderCost + holdCost;
+  var orderPct = total2 > 0 ? (orderCost / total2 * 100) : 50;
+  var holdPct  = 100 - orderPct;
+  document.getElementById('bar-order').style.width = orderPct.toFixed(1) + '%';
+  document.getElementById('bar-hold').style.width  = holdPct.toFixed(1) + '%';
+
+  var diff = Math.abs(orderCost - holdCost);
+  var msg = '';
+  if (diff < 0.01) {
+    msg = 'At EOQ, ordering and holding costs are perfectly balanced — this is the cost minimum.';
+  } else if (orderCost > holdCost) {
+    msg = 'Ordering cost is slightly higher than holding cost. Consider increasing order size slightly.';
+  } else {
+    msg = 'Holding cost is slightly higher than ordering cost. Consider reducing order size slightly.';
+  }
+  document.getElementById('balance-msg').textContent = msg;
+}
+
+calc();
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"EOQ Calculator","description":"Free online Economic Order Quantity calculator. Find the optimal inventory order quantity to minimise total costs.","applicationCategory":"CalculatorApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+
+</body>
+</html>
