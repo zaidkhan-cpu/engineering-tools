@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safety Stock Calculator — Free Inventory Buffer Calculator Online</title>
+<meta name="description" content="Calculate safety stock instantly. Enter demand variability, lead time, and service level to find your optimal inventory buffer. Free supply chain calculator with multiple methods.">
+<meta name="keywords" content="safety stock calculator, safety stock formula, inventory buffer calculator, service level calculator, supply chain calculator, reorder point calculator online">
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f1117; color: #e2e8f0; min-height: 100vh; font-size: 15px; line-height: 1.6; }
+
+header { background: #161b27; border-bottom: 1px solid #2d3748; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 15px; font-weight: 700; color: #f6ad55; letter-spacing: .04em; text-decoration: none; }
+nav { display: flex; gap: 6px; flex-wrap: wrap; }
+nav a { font-size: 12px; color: #718096; text-decoration: none; padding: 4px 10px; border-radius: 6px; border: 1px solid transparent; transition: all .15s; }
+nav a:hover { border-color: #2d3748; color: #e2e8f0; background: #1a202c; }
+nav a.active { color: #f6ad55; border-color: rgba(246,173,85,0.3); background: rgba(246,173,85,0.08); }
+
+.wrap { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+.hero { text-align: center; padding: 48px 0 32px; }
+.tag { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #f6ad55; background: rgba(246,173,85,0.1); border: 1px solid rgba(246,173,85,0.3); border-radius: 20px; padding: 4px 14px; margin-bottom: 18px; }
+h1 { font-size: clamp(26px,5vw,40px); font-weight: 700; margin-bottom: 12px; line-height: 1.2; }
+h1 em { color: #f6ad55; font-style: normal; }
+.sub { font-size: 15px; color: #718096; max-width: 500px; margin: 0 auto; }
+
+.card { background: #161b27; border: 1px solid #2d3748; border-radius: 14px; padding: 28px; margin-bottom: 20px; }
+
+/* RESULT */
+.result-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px; }
+.result-item { background: #1a202c; border: 1px solid #2d3748; border-radius: 10px; padding: 16px; text-align: center; }
+.result-item.primary { background: rgba(246,173,85,0.08); border-color: rgba(246,173,85,0.3); }
+.r-label { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #718096; margin-bottom: 6px; }
+.result-item.primary .r-label { color: #f6ad55; }
+.r-val { font-size: 30px; font-weight: 800; color: #e2e8f0; line-height: 1; }
+.result-item.primary .r-val { font-size: 38px; color: #f6ad55; }
+.r-sub { font-size: 11px; color: #4a5568; margin-top: 4px; }
+
+/* FORMULA */
+.formula { background: #1a202c; border: 1px solid #2d3748; border-radius: 8px; padding: 14px 16px; font-family: 'Courier New', monospace; font-size: 13px; color: #718096; text-align: center; margin-bottom: 24px; line-height: 2; }
+.formula b { color: #e2e8f0; }
+.formula .hi { color: #f6ad55; }
+
+/* METHOD TABS */
+.method-tabs { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+.method-tab { padding: 7px 16px; border-radius: 8px; border: 1px solid #2d3748; background: transparent; color: #718096; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s; }
+.method-tab:hover { border-color: #f6ad55; color: #f6ad55; }
+.method-tab.active { background: rgba(246,173,85,0.12); border-color: rgba(246,173,85,0.4); color: #f6ad55; }
+
+/* INPUTS */
+.inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.input-group { display: flex; flex-direction: column; gap: 6px; }
+.input-group.full { grid-column: span 2; }
+.input-label { font-size: 13px; font-weight: 600; color: #e2e8f0; }
+.input-desc { font-size: 11px; color: #4a5568; }
+input[type="number"], select {
+  width: 100%; background: #1a202c; border: 1px solid #2d3748; border-radius: 8px;
+  padding: 12px 14px; font-size: 15px; font-weight: 600; color: #f6ad55;
+  outline: none; transition: border-color .2s; -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+input[type="number"]:focus, select:focus { border-color: #f6ad55; }
+select { font-size: 14px; font-weight: 500; color: #e2e8f0; cursor: pointer; }
+
+/* SERVICE LEVEL SLIDER */
+.sl-wrap { display: flex; flex-direction: column; gap: 8px; }
+.sl-top { display: flex; justify-content: space-between; }
+.sl-label { font-size: 13px; font-weight: 600; color: #e2e8f0; }
+.sl-val { font-size: 18px; font-weight: 700; color: #f6ad55; }
+input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px; background: #2d3748; outline: none; cursor: pointer; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: #f6ad55; border: 2px solid #0f1117; box-shadow: 0 0 0 3px rgba(246,173,85,.25); cursor: pointer; }
+input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: #f6ad55; border: 2px solid #0f1117; cursor: pointer; }
+
+/* Z-FACTOR TABLE */
+.z-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #2d3748; font-size: 13px; }
+.z-row:last-child { border-bottom: none; }
+.z-sl { min-width: 60px; color: #718096; }
+.z-bar-wrap { flex: 1; height: 5px; background: #2d3748; border-radius: 3px; overflow: hidden; }
+.z-bar { height: 100%; background: #f6ad55; border-radius: 3px; }
+.z-val { min-width: 40px; text-align: right; font-family: 'Courier New', monospace; color: #e2e8f0; font-weight: 600; }
+.z-active { background: rgba(246,173,85,0.08); border-radius: 6px; padding: 8px !important; border: 1px solid rgba(246,173,85,0.2); }
+
+/* REORDER POINT */
+.rop-box { background: rgba(56,178,172,0.08); border: 1px solid rgba(56,178,172,0.3); border-radius: 10px; padding: 16px 18px; text-align: center; }
+.rop-label { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #38b2ac; margin-bottom: 6px; }
+.rop-val { font-size: 32px; font-weight: 800; color: #38b2ac; }
+.rop-sub { font-size: 12px; color: #4a5568; margin-top: 4px; }
+
+/* PRESETS */
+.presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.preset-btn { font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 6px; border: 1px solid #2d3748; background: transparent; color: #718096; cursor: pointer; transition: all .15s; }
+.preset-btn:hover { border-color: #f6ad55; color: #f6ad55; background: rgba(246,173,85,0.06); }
+
+.section-label { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #718096; margin-bottom: 14px; }
+.ad-slot { background: #161b27; border: 1px dashed #2d3748; border-radius: 10px; padding: 20px; text-align: center; font-size: 12px; font-family: monospace; color: #4a5568; margin: 20px 0; }
+
+article { background: #161b27; border: 1px solid #2d3748; border-radius: 14px; padding: 32px; margin-bottom: 20px; }
+article h2 { font-size: 22px; font-weight: 700; margin-bottom: 14px; }
+article h3 { font-size: 16px; font-weight: 600; margin: 22px 0 10px; }
+article p { font-size: 14px; color: #a0aec0; margin-bottom: 14px; line-height: 1.8; }
+article ul { padding-left: 18px; margin-bottom: 14px; }
+article li { font-size: 14px; color: #a0aec0; margin-bottom: 6px; }
+article strong { color: #e2e8f0; }
+table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 13px; }
+thead th { background: #1a202c; color: #718096; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 10px 12px; text-align: left; border-bottom: 1px solid #2d3748; }
+tbody td { padding: 10px 12px; color: #a0aec0; border-bottom: 1px solid #2d3748; }
+tbody td:first-child { color: #e2e8f0; font-weight: 600; }
+tbody tr:last-child td { border-bottom: none; }
+
+.tools-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(190px,1fr)); gap: 10px; margin-bottom: 36px; }
+.tool-link { background: #161b27; border: 1px solid #2d3748; border-radius: 10px; padding: 14px 16px; text-decoration: none; display: flex; align-items: center; gap: 12px; color: #e2e8f0; transition: border-color .15s; }
+.tool-link:hover { border-color: #f6ad55; background: rgba(246,173,85,0.06); }
+.tool-icon { font-size: 22px; width: 36px; text-align: center; }
+.tool-name { font-size: 13px; font-weight: 600; }
+.tool-desc { font-size: 11px; color: #718096; }
+
+footer { border-top: 1px solid #2d3748; padding: 28px 20px; text-align: center; }
+footer p { font-size: 12px; color: #4a5568; line-height: 1.8; }
+footer a { color: #718096; text-decoration: none; }
+footer a:hover { color: #f6ad55; }
+
+@media (max-width: 560px) {
+  .card { padding: 18px 14px; }
+  .result-grid { grid-template-columns: 1fr 1fr; }
+  .inputs { grid-template-columns: 1fr; }
+  .input-group.full { grid-column: span 1; }
+  article { padding: 20px 16px; }
+  nav { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">&#9881; ENGTOOLBOX</a>
+  <nav>
+    <a href="oee-calculator.html">OEE</a>
+    <a href="takt-time-calculator.html">Takt Time</a>
+    <a href="cpk-calculator.html">Cp/Cpk</a>
+    <a href="eoq-calculator.html">EOQ</a>
+    <a href="index.html">All Tools</a>
+  </nav>
+</header>
+
+<main>
+<div class="wrap">
+
+  <section class="hero">
+    <div class="tag">Supply Chain Calculator</div>
+    <h1>Safety Stock Calculator<br><em>Inventory Buffer Sizing</em></h1>
+    <p class="sub">Calculate the optimal inventory buffer to protect against demand and lead time variability. Includes reorder point calculation.</p>
+  </section>
+
+  <!-- CALCULATOR -->
+  <div class="card">
+
+    <div class="result-grid">
+      <div class="result-item primary">
+        <div class="r-label">Safety Stock</div>
+        <div class="r-val" id="r-ss">124</div>
+        <div class="r-sub">units to buffer</div>
+      </div>
+      <div class="result-item">
+        <div class="r-label">Z-Factor</div>
+        <div class="r-val" id="r-z">1.65</div>
+        <div class="r-sub">service level factor</div>
+      </div>
+      <div class="result-item">
+        <div class="r-label">Holding Cost</div>
+        <div class="r-val" id="r-cost">€124</div>
+        <div class="r-sub">per year (est.)</div>
+      </div>
+    </div>
+
+    <div class="formula">
+      <b>Safety Stock</b> = Z &times; &#963;<sub>demand</sub> &times; &radic;Lead Time<br>
+      = <span class="hi" id="f-z">1.65</span> &times; <span class="hi" id="f-std">50</span> &times; &radic;<span class="hi" id="f-lt">2</span> = <b id="f-result">117 units</b>
+    </div>
+
+    <!-- Method selector -->
+    <div class="section-label">Calculation Method</div>
+    <div class="method-tabs">
+      <button class="method-tab active" onclick="setMethod('basic',this)">Basic (Demand variability)</button>
+      <button class="method-tab" onclick="setMethod('advanced',this)">Advanced (Demand + Lead time)</button>
+    </div>
+
+    <!-- Service level slider -->
+    <div class="sl-wrap" style="margin-bottom:20px">
+      <div class="sl-top">
+        <div class="input-label">Service Level</div>
+        <div class="sl-val" id="sl-val">95%</div>
+      </div>
+      <div class="input-desc" style="margin-bottom:8px">Probability of not stocking out during lead time</div>
+      <input type="range" id="sl-slider" min="80" max="99.9" value="95" step="0.1" oninput="updateSL()">
+    </div>
+
+    <!-- Quick presets -->
+    <div class="section-label">Quick Examples</div>
+    <div class="presets">
+      <button class="preset-btn" onclick="setPreset(100,50,2,95)">Medium variability</button>
+      <button class="preset-btn" onclick="setPreset(200,80,4,99)">High service level</button>
+      <button class="preset-btn" onclick="setPreset(50,10,1,90)">Low variability</button>
+      <button class="preset-btn" onclick="setPreset(500,200,7,95)">Long lead time</button>
+    </div>
+
+    <!-- Inputs -->
+    <div class="inputs">
+      <div class="input-group">
+        <div class="input-label">Avg Daily Demand</div>
+        <div class="input-desc">Average units demanded per day</div>
+        <input type="number" id="inp-demand" value="100" min="1" oninput="calc()">
+      </div>
+      <div class="input-group">
+        <div class="input-label">Demand Std Dev (&sigma;)</div>
+        <div class="input-desc">Daily demand standard deviation</div>
+        <input type="number" id="inp-std" value="50" min="0" oninput="calc()">
+      </div>
+      <div class="input-group">
+        <div class="input-label">Lead Time (days)</div>
+        <div class="input-desc">Avg supplier delivery time</div>
+        <input type="number" id="inp-lt" value="2" min="1" oninput="calc()">
+      </div>
+      <div class="input-group" id="lt-std-group">
+        <div class="input-label">Lead Time Std Dev</div>
+        <div class="input-desc">Lead time variability (days) — advanced only</div>
+        <input type="number" id="inp-lt-std" value="0.5" min="0" step="0.1" oninput="calc()">
+      </div>
+      <div class="input-group">
+        <div class="input-label">Unit Holding Cost (€)</div>
+        <div class="input-desc">Cost to hold 1 unit for 1 year</div>
+        <input type="number" id="inp-hc" value="1" min="0" step="0.01" oninput="calc()">
+      </div>
+    </div>
+
+    <!-- Reorder Point -->
+    <div class="rop-box" style="margin-top:20px">
+      <div class="rop-label">&#8594; Reorder Point (ROP)</div>
+      <div class="rop-val" id="rop-val">324 units</div>
+      <div class="rop-sub">ROP = (Avg Daily Demand &times; Lead Time) + Safety Stock</div>
+    </div>
+  </div>
+
+  <!-- Z TABLE CARD -->
+  <div class="card">
+    <div class="section-label">Service Level Z-Factor Reference</div>
+    <div id="z-rows"></div>
+  </div>
+
+  <div class="ad-slot">&lt;!-- GOOGLE ADSENSE CODE HERE --&gt;</div>
+
+  <!-- ARTICLE -->
+  <article>
+    <h2>What is Safety Stock?</h2>
+    <p><strong>Safety stock</strong> is an extra quantity of inventory held to protect against unexpected increases in demand or delays in supplier delivery. Without safety stock, any variation from your average demand or lead time would cause a stockout — lost sales, production stoppages, or unhappy customers.</p>
+
+    <h3>The Safety Stock Formula</h3>
+    <p>The standard formula using demand variability only:</p>
+    <p><strong>Safety Stock = Z &times; &sigma;<sub>demand</sub> &times; &radic;Lead Time</strong></p>
+    <p>The advanced formula accounting for both demand and lead time variability:</p>
+    <p><strong>Safety Stock = Z &times; &radic;(LT &times; &sigma;<sub>d</sub>&sup2; + d&sup2; &times; &sigma;<sub>LT</sub>&sup2;)</strong></p>
+
+    <h3>Service Level and Z-Factor</h3>
+    <table>
+      <thead><tr><th>Service Level</th><th>Z-Factor</th><th>What It Means</th></tr></thead>
+      <tbody>
+        <tr><td>90%</td><td>1.28</td><td>1 stockout in every 10 replenishment cycles</td></tr>
+        <tr><td>95%</td><td>1.65</td><td>1 stockout in every 20 replenishment cycles</td></tr>
+        <tr><td>97.5%</td><td>1.96</td><td>1 stockout in every 40 replenishment cycles</td></tr>
+        <tr><td>99%</td><td>2.33</td><td>1 stockout in every 100 replenishment cycles</td></tr>
+        <tr><td>99.9%</td><td>3.09</td><td>1 stockout in every 1,000 cycles</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Safety Stock vs Reorder Point</h3>
+    <ul>
+      <li><strong>Safety stock</strong> — the buffer quantity you always keep on hand above your cycle stock</li>
+      <li><strong>Reorder point</strong> — the inventory level that triggers a new order: ROP = (avg demand &times; lead time) + safety stock</li>
+      <li><strong>Cycle stock</strong> — the inventory that gets consumed between orders (related to EOQ)</li>
+    </ul>
+    <p>Use this safety stock calculator together with the <a href="eoq-calculator.html" style="color:#f6ad55">EOQ Calculator</a> for a complete inventory management system.</p>
+  </article>
+
+  <!-- RELATED -->
+  <div class="section-label" style="margin-bottom:12px">Related Industrial Engineering Calculators</div>
+  <div class="tools-grid">
+    <a class="tool-link" href="eoq-calculator.html"><span class="tool-icon">&#128230;</span><div><div class="tool-name">EOQ Calculator</div><div class="tool-desc">Optimal order quantity</div></div></a>
+    <a class="tool-link" href="reorder-point-calculator.html"><span class="tool-icon">&#128257;</span><div><div class="tool-name">Reorder Point</div><div class="tool-desc">When to reorder</div></div></a>
+    <a class="tool-link" href="oee-calculator.html"><span class="tool-icon">&#128200;</span><div><div class="tool-name">OEE Calculator</div><div class="tool-desc">Equipment effectiveness</div></div></a>
+    <a class="tool-link" href="takt-time-calculator.html"><span class="tool-icon">&#9201;</span><div><div class="tool-name">Takt Time</div><div class="tool-desc">Production pacing</div></div></a>
+    <a class="tool-link" href="cpk-calculator.html"><span class="tool-icon">&#128202;</span><div><div class="tool-name">Cp/Cpk</div><div class="tool-desc">Process capability</div></div></a>
+    <a class="tool-link" href="pert-calculator.html"><span class="tool-icon">&#128197;</span><div><div class="tool-name">PERT Calculator</div><div class="tool-desc">Project duration</div></div></a>
+  </div>
+
+  <div class="ad-slot">&lt;!-- SECOND ADSENSE UNIT HERE --&gt;</div>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong style="color:#718096">Engineering Toolbox</strong> — Free industrial engineering calculators<br>
+    <a href="index.html">All Tools</a> &middot; <a href="about.html">About</a></p>
+    <p style="margin-top:8px">Based on APICS inventory management standards. Validate with your supply chain team.</p>
+  </div>
+</footer>
+
+<script>
+var zTable = [
+  {sl:80,  z:0.84},
+  {sl:85,  z:1.04},
+  {sl:90,  z:1.28},
+  {sl:92,  z:1.41},
+  {sl:95,  z:1.65},
+  {sl:97,  z:1.88},
+  {sl:97.5,z:1.96},
+  {sl:98,  z:2.05},
+  {sl:99,  z:2.33},
+  {sl:99.5,z:2.58},
+  {sl:99.9,z:3.09}
+];
+
+var method = 'basic';
+
+function setMethod(m, btn) {
+  method = m;
+  document.querySelectorAll('.method-tab').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('lt-std-group').style.opacity = m === 'advanced' ? '1' : '0.35';
+  calc();
+}
+
+function getZ(sl) {
+  for (var i = zTable.length - 1; i >= 0; i--) {
+    if (sl >= zTable[i].sl) {
+      if (i < zTable.length - 1) {
+        var lo = zTable[i], hi = zTable[i+1];
+        var t = (sl - lo.sl) / (hi.sl - lo.sl);
+        return lo.z + t * (hi.z - lo.z);
+      }
+      return zTable[i].z;
+    }
+  }
+  return 1.65;
+}
+
+function setPreset(d, std, lt, sl) {
+  document.getElementById('inp-demand').value = d;
+  document.getElementById('inp-std').value    = std;
+  document.getElementById('inp-lt').value     = lt;
+  document.getElementById('sl-slider').value  = sl;
+  updateSL();
+}
+
+function updateSL() {
+  var sl = parseFloat(document.getElementById('sl-slider').value);
+  document.getElementById('sl-val').textContent = sl.toFixed(1) + '%';
+  calc();
+}
+
+function buildZTable(currentSL) {
+  var wrap = document.getElementById('z-rows');
+  var html = '';
+  zTable.forEach(function(row) {
+    var isActive = Math.abs(row.sl - currentSL) < 3;
+    var barW = (row.z / 3.09 * 100).toFixed(0);
+    html += '<div class="z-row' + (isActive ? ' z-active' : '') + '">' +
+      '<span class="z-sl">' + row.sl + '%</span>' +
+      '<div class="z-bar-wrap"><div class="z-bar" style="width:' + barW + '%"></div></div>' +
+      '<span class="z-val">' + row.z.toFixed(2) + '</span>' +
+      '</div>';
+  });
+  wrap.innerHTML = html;
+}
+
+function calc() {
+  var demand  = parseFloat(document.getElementById('inp-demand').value) || 0;
+  var std     = parseFloat(document.getElementById('inp-std').value)    || 0;
+  var lt      = parseFloat(document.getElementById('inp-lt').value)     || 1;
+  var ltStd   = parseFloat(document.getElementById('inp-lt-std').value) || 0;
+  var hc      = parseFloat(document.getElementById('inp-hc').value)     || 1;
+  var sl      = parseFloat(document.getElementById('sl-slider').value);
+  var z       = getZ(sl);
+
+  var ss;
+  if (method === 'basic') {
+    ss = z * std * Math.sqrt(lt);
+  } else {
+    ss = z * Math.sqrt(lt * std * std + demand * demand * ltStd * ltStd);
+  }
+  ss = Math.round(ss);
+
+  var rop     = Math.round(demand * lt + ss);
+  var cost    = ss * hc;
+
+  document.getElementById('r-ss').textContent   = ss;
+  document.getElementById('r-z').textContent    = z.toFixed(2);
+  document.getElementById('r-cost').textContent = '€' + cost.toFixed(0);
+
+  document.getElementById('f-z').textContent    = z.toFixed(2);
+  document.getElementById('f-std').textContent  = std;
+  document.getElementById('f-lt').textContent   = lt;
+  document.getElementById('f-result').textContent = ss + ' units';
+
+  document.getElementById('rop-val').textContent = rop + ' units';
+
+  buildZTable(sl);
+}
+
+// Init
+document.getElementById('lt-std-group').style.opacity = '0.35';
+updateSL();
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Safety Stock Calculator","description":"Free online safety stock calculator. Calculate inventory buffer and reorder point using demand variability and service level.","applicationCategory":"CalculatorApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+
+</body>
+</html>
