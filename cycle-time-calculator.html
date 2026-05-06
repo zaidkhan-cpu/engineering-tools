@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cycle Time Calculator — Free Manufacturing Bottleneck Analysis Tool</title>
+<meta name="description" content="Calculate cycle time and identify production bottlenecks instantly. Enter workstation times to find your constraint, throughput rate, and line efficiency. Free lean manufacturing calculator.">
+<meta name="keywords" content="cycle time calculator, bottleneck analysis, production throughput calculator, line efficiency calculator, manufacturing cycle time, workstation analysis tool online">
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f1117; color: #e2e8f0; min-height: 100vh; font-size: 15px; line-height: 1.6; }
+
+header { background: #161b27; border-bottom: 1px solid #2d3748; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 15px; font-weight: 700; color: #f6ad55; letter-spacing: .04em; text-decoration: none; }
+nav { display: flex; gap: 6px; flex-wrap: wrap; }
+nav a { font-size: 12px; color: #718096; text-decoration: none; padding: 4px 10px; border-radius: 6px; border: 1px solid transparent; transition: all .15s; }
+nav a:hover { border-color: #2d3748; color: #e2e8f0; background: #1a202c; }
+nav a.active { color: #f6ad55; border-color: rgba(246,173,85,0.3); background: rgba(246,173,85,0.08); }
+
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+.hero { text-align: center; padding: 48px 0 32px; }
+.tag { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #f6ad55; background: rgba(246,173,85,0.1); border: 1px solid rgba(246,173,85,0.3); border-radius: 20px; padding: 4px 14px; margin-bottom: 18px; }
+h1 { font-size: clamp(26px,5vw,40px); font-weight: 700; margin-bottom: 12px; line-height: 1.2; }
+h1 em { color: #f6ad55; font-style: normal; }
+.sub { font-size: 15px; color: #718096; max-width: 500px; margin: 0 auto; }
+
+.card { background: #161b27; border: 1px solid #2d3748; border-radius: 14px; padding: 28px; margin-bottom: 20px; }
+.section-label { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #718096; margin-bottom: 14px; }
+
+/* RESULTS */
+.result-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 24px; }
+.result-item { background: #1a202c; border: 1px solid #2d3748; border-radius: 10px; padding: 14px; text-align: center; }
+.result-item.primary { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.35); }
+.result-item.green  { background: rgba(34,197,94,0.08); border-color: rgba(34,197,94,0.3); }
+.result-item.amber  { background: rgba(246,173,85,0.08); border-color: rgba(246,173,85,0.3); }
+.r-label { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #718096; margin-bottom: 6px; }
+.result-item.primary .r-label { color: #fc8181; }
+.result-item.green .r-label   { color: #22c55e; }
+.result-item.amber .r-label   { color: #f6ad55; }
+.r-val { font-size: 26px; font-weight: 800; color: #e2e8f0; line-height: 1; }
+.result-item.primary .r-val { color: #fc8181; font-size: 32px; }
+.result-item.green .r-val   { color: #22c55e; font-size: 32px; }
+.result-item.amber .r-val   { color: #f6ad55; }
+.r-sub { font-size: 11px; color: #4a5568; margin-top: 4px; }
+
+/* BOTTLENECK ALERT */
+.bottleneck-alert { background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.alert-icon { font-size: 22px; flex-shrink: 0; }
+.alert-text { font-size: 13px; color: #fc8181; line-height: 1.5; }
+.alert-text strong { color: #fc8181; }
+
+/* BAR CHART */
+.bar-chart { display: flex; flex-direction: column; gap: 10px; margin-bottom: 8px; }
+.bar-row { display: flex; align-items: center; gap: 12px; }
+.bar-name { font-size: 12px; color: #a0aec0; min-width: 110px; max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bar-track { flex: 1; height: 28px; background: #1a202c; border-radius: 6px; overflow: hidden; position: relative; }
+.bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.9); transition: width .5s ease; min-width: 30px; }
+.bar-val { font-size: 12px; font-weight: 600; color: #718096; min-width: 60px; text-align: right; font-family: 'Courier New', monospace; }
+.takt-line { position: absolute; top: 0; bottom: 0; width: 2px; background: #38b2ac; opacity: 0.8; }
+
+/* WORKSTATION TABLE */
+.ws-table-wrap { overflow-x: auto; }
+table.ws-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 500px; }
+table.ws-table th { background: #1a202c; color: #718096; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 10px 12px; text-align: left; border-bottom: 1px solid #2d3748; }
+table.ws-table td { padding: 9px 12px; border-bottom: 1px solid #2d3748; vertical-align: middle; }
+table.ws-table tr:last-child td { border-bottom: none; }
+table.ws-table input[type="text"] { width: 120px; background: transparent; border: none; color: #e2e8f0; font-size: 13px; outline: none; font-weight: 500; }
+table.ws-table input[type="number"] { width: 80px; background: #1a202c; border: 1px solid #2d3748; border-radius: 6px; padding: 6px 8px; font-size: 13px; font-weight: 600; color: #f6ad55; outline: none; -moz-appearance: textfield; }
+table.ws-table input[type="number"]::-webkit-outer-spin-button,
+table.ws-table input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+table.ws-table input[type="number"]:focus { border-color: #f6ad55; }
+.status-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; white-space: nowrap; }
+.status-bottleneck { background: rgba(239,68,68,0.15); color: #fc8181; border: 1px solid rgba(239,68,68,0.3); }
+.status-ok { background: rgba(34,197,94,0.1); color: #22c55e; border: 1px solid rgba(34,197,94,0.2); }
+.status-idle { background: rgba(113,128,150,0.1); color: #718096; border: 1px solid #2d3748; }
+.eff-cell { font-family: 'Courier New', monospace; font-weight: 600; }
+
+.btn { padding: 8px 16px; border-radius: 8px; border: 1px solid #2d3748; background: transparent; color: #718096; font-size: 13px; cursor: pointer; transition: all .15s; }
+.btn:hover { border-color: #f6ad55; color: #f6ad55; }
+.btn-sm { padding: 4px 10px; font-size: 11px; }
+.btn-sm:hover { border-color: #ef4444; color: #ef4444; }
+
+select { background: #1a202c; border: 1px solid #2d3748; border-radius: 8px; padding: 10px 12px; font-size: 14px; color: #e2e8f0; outline: none; cursor: pointer; }
+
+.ad-slot { background: #161b27; border: 1px dashed #2d3748; border-radius: 10px; padding: 20px; text-align: center; font-size: 12px; font-family: monospace; color: #4a5568; margin: 20px 0; }
+
+article { background: #161b27; border: 1px solid #2d3748; border-radius: 14px; padding: 32px; margin-bottom: 20px; }
+article h2 { font-size: 22px; font-weight: 700; margin-bottom: 14px; }
+article h3 { font-size: 16px; font-weight: 600; margin: 22px 0 10px; }
+article p { font-size: 14px; color: #a0aec0; margin-bottom: 14px; line-height: 1.8; }
+article ul { padding-left: 18px; margin-bottom: 14px; }
+article li { font-size: 14px; color: #a0aec0; margin-bottom: 6px; }
+article strong { color: #e2e8f0; }
+article table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 13px; }
+article thead th { background: #1a202c; color: #718096; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 10px 12px; text-align: left; border-bottom: 1px solid #2d3748; }
+article tbody td { padding: 10px 12px; color: #a0aec0; border-bottom: 1px solid #2d3748; }
+article tbody td:first-child { color: #e2e8f0; font-weight: 600; }
+article tbody tr:last-child td { border-bottom: none; }
+
+.tools-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(190px,1fr)); gap: 10px; margin-bottom: 36px; }
+.tool-link { background: #161b27; border: 1px solid #2d3748; border-radius: 10px; padding: 14px 16px; text-decoration: none; display: flex; align-items: center; gap: 12px; color: #e2e8f0; transition: border-color .15s; }
+.tool-link:hover { border-color: #f6ad55; background: rgba(246,173,85,0.06); }
+.tool-icon { font-size: 22px; width: 36px; text-align: center; }
+.tool-name { font-size: 13px; font-weight: 600; }
+.tool-desc { font-size: 11px; color: #718096; }
+
+footer { border-top: 1px solid #2d3748; padding: 28px 20px; text-align: center; }
+footer p { font-size: 12px; color: #4a5568; line-height: 1.8; }
+footer a { color: #718096; text-decoration: none; }
+footer a:hover { color: #f6ad55; }
+
+@media (max-width: 600px) {
+  .result-grid { grid-template-columns: 1fr 1fr; }
+  article { padding: 20px 16px; }
+  nav { display: none; }
+  .card { padding: 18px 14px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">&#9881; ENGTOOLBOX</a>
+  <nav>
+    <a href="oee-calculator.html">OEE</a>
+    <a href="takt-time-calculator.html">Takt Time</a>
+    <a href="cpk-calculator.html">Cp/Cpk</a>
+    <a href="eoq-calculator.html">EOQ</a>
+    <a href="index.html">All Tools</a>
+  </nav>
+</header>
+
+<main>
+<div class="wrap">
+
+  <section class="hero">
+    <div class="tag">Lean Manufacturing Calculator</div>
+    <h1>Cycle Time Calculator<br><em>Bottleneck Analysis Tool</em></h1>
+    <p class="sub">Enter your workstation cycle times to instantly identify your production bottleneck, line efficiency, and maximum throughput rate.</p>
+  </section>
+
+  <!-- MAIN CALCULATOR -->
+  <div class="card">
+
+    <div class="result-grid">
+      <div class="result-item primary">
+        <div class="r-label">&#9888; Bottleneck CT</div>
+        <div class="r-val" id="r-bottleneck">85</div>
+        <div class="r-sub" id="r-unit-lbl">sec/unit</div>
+      </div>
+      <div class="result-item green">
+        <div class="r-label">Max Throughput</div>
+        <div class="r-val" id="r-throughput">42</div>
+        <div class="r-sub">units/hour</div>
+      </div>
+      <div class="result-item amber">
+        <div class="r-label">Line Efficiency</div>
+        <div class="r-val" id="r-efficiency">74%</div>
+        <div class="r-sub">value-added ratio</div>
+      </div>
+      <div class="result-item">
+        <div class="r-label">Avg Cycle Time</div>
+        <div class="r-val" id="r-avg">63</div>
+        <div class="r-sub" id="r-unit-lbl2">sec/unit</div>
+      </div>
+    </div>
+
+    <!-- Bottleneck alert -->
+    <div class="bottleneck-alert" id="bottleneck-alert">
+      <div class="alert-icon">&#9888;</div>
+      <div class="alert-text" id="alert-text">
+        <strong>Bottleneck: Assembly</strong> — This station limits your entire line to 42 units/hour. Reduce its cycle time to increase throughput.
+      </div>
+    </div>
+
+    <!-- Bar chart -->
+    <div class="section-label">Workstation Cycle Time Comparison</div>
+    <div class="bar-chart" id="bar-chart"></div>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:11px;color:#38b2ac">
+      <div style="width:14px;height:2px;background:#38b2ac"></div>
+      <span>Takt time line (if set)</span>
+      <input type="number" id="takt-input" placeholder="Enter takt time..." style="margin-left:12px;width:140px;background:#1a202c;border:1px solid #2d3748;border-radius:6px;padding:5px 10px;font-size:12px;color:#38b2ac;outline:none;" oninput="render()">
+      <select id="takt-unit" onchange="render()" style="padding:5px 10px;font-size:12px;">
+        <option value="1">seconds</option>
+        <option value="60">minutes</option>
+      </select>
+    </div>
+
+    <!-- Workstation table -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin:24px 0 14px;flex-wrap:wrap;gap:10px">
+      <div class="section-label" style="margin-bottom:0">Workstations</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <select id="time-unit" onchange="render()">
+          <option value="sec">Seconds</option>
+          <option value="min">Minutes</option>
+        </select>
+        <button class="btn" onclick="addStation()">+ Add Station</button>
+      </div>
+    </div>
+
+    <div class="ws-table-wrap">
+      <table class="ws-table">
+        <thead>
+          <tr>
+            <th>Station Name</th>
+            <th>Cycle Time</th>
+            <th>Efficiency vs BN</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="ws-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="ad-slot">&lt;!-- GOOGLE ADSENSE CODE HERE --&gt;</div>
+
+  <!-- ARTICLE -->
+  <article>
+    <h2>What is Cycle Time in Manufacturing?</h2>
+    <p><strong>Cycle time</strong> is the total elapsed time from the moment work begins on one unit to the moment work begins on the next unit at a given workstation. It is the fundamental pacing metric of any production line — directly determining throughput and output rate.</p>
+
+    <h3>Cycle Time vs Takt Time vs Lead Time</h3>
+    <table>
+      <thead><tr><th>Metric</th><th>Definition</th><th>Direction</th></tr></thead>
+      <tbody>
+        <tr><td>Cycle Time</td><td>How fast your process actually produces</td><td>Internal — measured</td></tr>
+        <tr><td>Takt Time</td><td>How fast the customer needs you to produce</td><td>External — calculated</td></tr>
+        <tr><td>Lead Time</td><td>Total time from order to delivery</td><td>End-to-end — experienced</td></tr>
+      </tbody>
+    </table>
+    <p>For a balanced line: cycle time should equal takt time at every station. If any station's cycle time exceeds takt time, that station is a bottleneck — it cannot keep pace with customer demand.</p>
+
+    <h3>Bottleneck Analysis — Theory of Constraints</h3>
+    <p>Based on Goldratt's <strong>Theory of Constraints (TOC)</strong>, the output of any production line is limited by its slowest workstation — the bottleneck. No matter how fast other stations run, the line can only produce as fast as the bottleneck allows.</p>
+    <ul>
+      <li><strong>Identify</strong> — Find the station with the longest cycle time</li>
+      <li><strong>Exploit</strong> — Maximise throughput at the bottleneck (no downtime, no defects)</li>
+      <li><strong>Subordinate</strong> — Align all other stations to support the bottleneck</li>
+      <li><strong>Elevate</strong> — Invest to increase bottleneck capacity (more operators, faster machines)</li>
+      <li><strong>Repeat</strong> — Once resolved, the next bottleneck appears — repeat the cycle</li>
+    </ul>
+
+    <h3>Line Efficiency Formula</h3>
+    <p><strong>Line Efficiency = (Sum of all cycle times) &divide; (Number of stations &times; Bottleneck cycle time) &times; 100%</strong></p>
+    <p>A line efficiency of 100% means every station is perfectly balanced. In practice, 85–95% is excellent. Below 70% indicates significant imbalance — workload redistribution is needed.</p>
+
+    <h3>How to Use This Calculator</h3>
+    <ul>
+      <li>Enter cycle times for each workstation on your production line</li>
+      <li>The bottleneck is highlighted automatically in red</li>
+      <li>Enter your takt time to see which stations exceed customer demand</li>
+      <li>Use the efficiency column to identify stations with the most idle time for rebalancing</li>
+    </ul>
+  </article>
+
+  <div class="section-label" style="margin-bottom:12px">Related Industrial Engineering Calculators</div>
+  <div class="tools-grid">
+    <a class="tool-link" href="oee-calculator.html"><span class="tool-icon">&#128200;</span><div><div class="tool-name">OEE Calculator</div><div class="tool-desc">Equipment effectiveness</div></div></a>
+    <a class="tool-link" href="takt-time-calculator.html"><span class="tool-icon">&#9201;</span><div><div class="tool-name">Takt Time</div><div class="tool-desc">Production pacing</div></div></a>
+    <a class="tool-link" href="cpk-calculator.html"><span class="tool-icon">&#128202;</span><div><div class="tool-name">Cp/Cpk</div><div class="tool-desc">Process capability</div></div></a>
+    <a class="tool-link" href="eoq-calculator.html"><span class="tool-icon">&#128230;</span><div><div class="tool-name">EOQ Calculator</div><div class="tool-desc">Order quantity</div></div></a>
+    <a class="tool-link" href="safety-stock-calculator.html"><span class="tool-icon">&#128737;</span><div><div class="tool-name">Safety Stock</div><div class="tool-desc">Inventory buffer</div></div></a>
+    <a class="tool-link" href="pert-calculator.html"><span class="tool-icon">&#128197;</span><div><div class="tool-name">PERT Calculator</div><div class="tool-desc">Project duration</div></div></a>
+  </div>
+
+  <div class="ad-slot">&lt;!-- SECOND ADSENSE UNIT HERE --&gt;</div>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong style="color:#718096">Engineering Toolbox</strong> — Free industrial engineering calculators<br>
+    <a href="index.html">All Tools</a> &middot; <a href="about.html">About</a></p>
+    <p style="margin-top:8px">Based on lean manufacturing and Theory of Constraints principles.</p>
+  </div>
+</footer>
+
+<script>
+var stations = [
+  {name: 'Press',    ct: 45},
+  {name: 'Assembly', ct: 85},
+  {name: 'Weld',     ct: 60},
+  {name: 'Paint',    ct: 70},
+  {name: 'Inspect',  ct: 40},
+  {name: 'Pack',     ct: 35}
+];
+
+function addStation() {
+  stations.push({name: 'Station ' + (stations.length+1), ct: 60});
+  render();
+}
+
+function removeStation(i) {
+  if (stations.length <= 2) return;
+  stations.splice(i, 1);
+  render();
+}
+
+function render() {
+  var unit     = document.getElementById('time-unit').value;
+  var taktRaw  = parseFloat(document.getElementById('takt-input').value) || 0;
+  var taktMult = parseFloat(document.getElementById('takt-unit').value);
+  var taktSec  = taktRaw * taktMult;
+
+  // Read current values from inputs if they exist
+  var rows = document.querySelectorAll('#ws-body tr');
+  rows.forEach(function(row, i) {
+    if (i < stations.length) {
+      var nameIn = row.querySelector('input[type="text"]');
+      var ctIn   = row.querySelector('input[type="number"]');
+      if (nameIn) stations[i].name = nameIn.value;
+      if (ctIn)   stations[i].ct   = parseFloat(ctIn.value) || 0;
+    }
+  });
+
+  // Find bottleneck
+  var maxCT = 0;
+  var bnIdx = 0;
+  stations.forEach(function(s, i) {
+    if (s.ct > maxCT) { maxCT = s.ct; bnIdx = i; }
+  });
+
+  var totalCT  = stations.reduce(function(a,s){ return a + s.ct; }, 0);
+  var avgCT    = totalCT / stations.length;
+  var lineEff  = maxCT > 0 ? (totalCT / (stations.length * maxCT) * 100) : 0;
+  var unitLabel = unit === 'sec' ? 'sec/unit' : 'min/unit';
+  var throughput = maxCT > 0 ? (unit === 'sec' ? 3600/maxCT : 60/maxCT) : 0;
+
+  // Update result cards
+  document.getElementById('r-bottleneck').textContent = maxCT.toFixed(0);
+  document.getElementById('r-throughput').textContent = throughput.toFixed(1);
+  document.getElementById('r-efficiency').textContent = lineEff.toFixed(1) + '%';
+  document.getElementById('r-avg').textContent        = avgCT.toFixed(1);
+  document.getElementById('r-unit-lbl').textContent   = unitLabel;
+  document.getElementById('r-unit-lbl2').textContent  = unitLabel;
+
+  // Alert
+  document.getElementById('alert-text').innerHTML =
+    '<strong>Bottleneck: ' + stations[bnIdx].name + '</strong> — This station limits your entire line to ' +
+    throughput.toFixed(1) + ' units/' + (unit === 'sec' ? 'hour' : 'min') +
+    '. Reduce its cycle time to increase throughput.';
+
+  // Bar chart
+  var barHtml = '';
+  stations.forEach(function(s, i) {
+    var pct  = maxCT > 0 ? (s.ct / maxCT * 100) : 0;
+    var isBN = (i === bnIdx);
+    var color = isBN ? '#ef4444' : s.ct >= maxCT * 0.85 ? '#f6ad55' : '#38b2ac';
+    var taktPct = (taktSec > 0 && maxCT > 0) ? (taktSec / maxCT * 100) : 0;
+    var taktLine = (taktSec > 0 && taktPct <= 100)
+      ? '<div class="takt-line" style="left:' + Math.min(taktPct, 99) + '%"></div>' : '';
+    barHtml +=
+      '<div class="bar-row">' +
+      '<div class="bar-name" title="' + s.name + '">' + s.name + '</div>' +
+      '<div class="bar-track">' +
+        '<div class="bar-fill" style="width:' + pct.toFixed(1) + '%;background:' + color + '">' +
+          (pct > 15 ? s.ct + (unit==='sec'?'s':'m') : '') +
+        '</div>' +
+        taktLine +
+      '</div>' +
+      '<div class="bar-val">' + s.ct + ' ' + (unit==='sec'?'s':'m') + '</div>' +
+      '</div>';
+  });
+  document.getElementById('bar-chart').innerHTML = barHtml;
+
+  // Table
+  var tbHtml = '';
+  stations.forEach(function(s, i) {
+    var isBN  = (i === bnIdx);
+    var eff   = maxCT > 0 ? (s.ct / maxCT * 100) : 0;
+    var effColor = eff >= 90 ? '#fc8181' : eff >= 70 ? '#f6ad55' : '#22c55e';
+    var badge, badgeClass;
+    if (isBN) { badge = '&#9888; Bottleneck'; badgeClass = 'status-bottleneck'; }
+    else if (eff >= 80) { badge = 'Near limit'; badgeClass = 'status-ok'; }
+    else { badge = 'Idle capacity'; badgeClass = 'status-idle'; }
+
+    tbHtml +=
+      '<tr style="' + (isBN ? 'background:rgba(239,68,68,0.04)' : '') + '">' +
+      '<td><input type="text" value="' + s.name + '" onchange="stations['+i+'].name=this.value;render()"></td>' +
+      '<td><input type="number" value="' + s.ct + '" min="1" step="0.5" oninput="stations['+i+'].ct=parseFloat(this.value)||0;render()"></td>' +
+      '<td class="eff-cell" style="color:' + effColor + '">' + eff.toFixed(1) + '%</td>' +
+      '<td><span class="status-badge ' + badgeClass + '">' + badge + '</span></td>' +
+      '<td><button class="btn btn-sm" onclick="removeStation('+i+')">&#10005;</button></td>' +
+      '</tr>';
+  });
+  document.getElementById('ws-body').innerHTML = tbHtml;
+}
+
+render();
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Cycle Time Calculator","description":"Free online cycle time and bottleneck analysis calculator for manufacturing. Identify production constraints and line efficiency.","applicationCategory":"CalculatorApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+
+</body>
+</html>
