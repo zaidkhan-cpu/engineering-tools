@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Break-Even Calculator — Free Break-Even Point Analysis Tool Online</title>
+<meta name="description" content="Calculate your break-even point instantly. Enter fixed costs, variable costs, and selling price to find how many units you need to sell. Free financial analysis calculator with chart.">
+<meta name="keywords" content="break even calculator, break even point formula, break even analysis, contribution margin calculator, profit loss calculator online">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f1117; color: #e2e8f0; min-height: 100vh; font-size: 15px; line-height: 1.6; }
+header { background: #161b27; border-bottom: 1px solid #2d3748; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 15px; font-weight: 700; color: #f6ad55; text-decoration: none; }
+nav { display: flex; gap: 6px; flex-wrap: wrap; }
+nav a { font-size: 12px; color: #718096; text-decoration: none; padding: 4px 10px; border-radius: 6px; border: 1px solid transparent; transition: all .15s; }
+nav a:hover { border-color: #2d3748; color: #e2e8f0; background: #1a202c; }
+nav a.active { color: #f6ad55; border-color: rgba(246,173,85,0.3); background: rgba(246,173,85,0.08); }
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+.hero { text-align: center; padding: 48px 0 32px; }
+.tag { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #f6ad55; background: rgba(246,173,85,0.1); border: 1px solid rgba(246,173,85,0.3); border-radius: 20px; padding: 4px 14px; margin-bottom: 18px; }
+h1 { font-size: clamp(26px,5vw,40px); font-weight: 700; margin-bottom: 12px; line-height: 1.2; }
+h1 em { color: #f6ad55; font-style: normal; }
+.sub { font-size: 15px; color: #718096; max-width: 500px; margin: 0 auto; }
+.card { background: #161b27; border: 1px solid #2d3748; border-radius: 14px; padding: 28px; margin-bottom: 20px; }
+.section-label { font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #718096; margin-bottom: 14px; }
+.result-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 24px; }
+.ri { background: #1a202c; border: 1px solid #2d3748; border-radius: 10px; padding: 14px; text-align: center; }
+.ri.amber { background: rgba(246,173,85,0.08); border-color: rgba(246,173,85,0.3); }
+.ri.green { background: rgba(34,197,94,0.08); border-color: rgba(34,197,94,0.3); }
+.ri.teal  { background: rgba(56,178,172,0.08); border-color: rgba(56,178,172,0.3); }
+.rl { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #718096; margin-bottom: 6px; }
+.ri.amber .rl { color: #f6ad55; }
+.ri.green .rl { color: #22c55e; }
+.ri.teal .rl  { color: #38b2ac; }
+.rv { font-size: 24px; font-weight: 800; color: #e2e8f0; line-height: 1; }
+.ri.amber .rv { font-size: 32px; color: #f6ad55; }
+.ri.green .rv { color: #22c55e; }
+.ri.teal .rv  { color: #38b2ac; }
+.rs { font-size: 11px; color: #4a5568; margin-top: 4px; }
+.formula { background: #1a202c; border: 1px solid #2d3748; border-radius: 8px; padding: 14px 16px; font-family: 'Courier New', monospace; font-size: 13px; color: #718096; text-align: center; margin-bottom: 24px; line-height: 2; }
+.formula b { color: #e2e8f0; }
+.formula .hi { color: #f6ad55; }
+.inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.ig { display: flex; flex-direction: column; gap: 6px; }
+.il { font-size: 13px; font-weight: 600; color: #e2e8f0; }
+.id { font-size: 11px; color: #4a5568; }
+.irow { display: flex; align-items: center; }
+.cur { background: #1a202c; border: 1px solid #2d3748; border-right: none; border-radius: 8px 0 0 8px; padding: 12px; font-size: 14px; color: #718096; }
+input[type="number"] { flex: 1; background: #1a202c; border: 1px solid #2d3748; border-radius: 0 8px 8px 0; padding: 12px 14px; font-size: 15px; font-weight: 600; color: #f6ad55; outline: none; -moz-appearance: textfield; width: 100%; }
+input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+input[type="number"]:focus { border-color: #f6ad55; }
+input.solo { border-radius: 8px; }
+input[type="range"] { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px; background: #2d3748; outline: none; cursor: pointer; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: #f6ad55; border: 2px solid #0f1117; box-shadow: 0 0 0 3px rgba(246,173,85,.25); cursor: pointer; }
+input[type="range"]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: #f6ad55; border: 2px solid #0f1117; cursor: pointer; }
+.presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.pb { font-size: 12px; font-weight: 500; padding: 5px 12px; border-radius: 6px; border: 1px solid #2d3748; background: transparent; color: #718096; cursor: pointer; transition: all .15s; }
+.pb:hover { border-color: #f6ad55; color: #f6ad55; }
+.chart-wrap { height: 220px; margin: 8px 0; }
+canvas { width: 100%; height: 100%; }
+.pl-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.pl-table th { background: #1a202c; color: #718096; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 10px 12px; text-align: left; border-bottom: 1px solid #2d3748; }
+.pl-table td { padding: 10px 12px; border-bottom: 1px solid #2d3748; font-family: 'Courier New', monospace; font-size: 13px; }
+.pl-table td:first-child { color: #a0aec0; font-family: inherit; }
+.pl-table tr:last-child td { border-bottom: none; }
+.pl-table tr.bep-row td { background: rgba(246,173,85,0.07); font-weight: 700; }
+.pl-table .profit { color: #22c55e; }
+.pl-table .loss   { color: #ef4444; }
+.ad-slot { background: #161b27; border: 1px dashed #2d3748; border-radius: 10px; padding: 20px; text-align: center; font-size: 12px; font-family: monospace; color: #4a5568; margin: 20px 0; }
+article { background: #161b27; border: 1px solid #2d3748; border-radius: 14px; padding: 32px; margin-bottom: 20px; }
+article h2 { font-size: 22px; font-weight: 700; margin-bottom: 14px; }
+article h3 { font-size: 16px; font-weight: 600; margin: 22px 0 10px; }
+article p { font-size: 14px; color: #a0aec0; margin-bottom: 14px; line-height: 1.8; }
+article ul { padding-left: 18px; margin-bottom: 14px; }
+article li { font-size: 14px; color: #a0aec0; margin-bottom: 6px; }
+article strong { color: #e2e8f0; }
+article table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 13px; }
+article thead th { background: #1a202c; color: #718096; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 10px 12px; text-align: left; border-bottom: 1px solid #2d3748; }
+article tbody td { padding: 10px 12px; color: #a0aec0; border-bottom: 1px solid #2d3748; }
+article tbody td:first-child { color: #e2e8f0; font-weight: 600; }
+article tbody tr:last-child td { border-bottom: none; }
+.tools-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(190px,1fr)); gap: 10px; margin-bottom: 36px; }
+.tool-link { background: #161b27; border: 1px solid #2d3748; border-radius: 10px; padding: 14px 16px; text-decoration: none; display: flex; align-items: center; gap: 12px; color: #e2e8f0; transition: border-color .15s; }
+.tool-link:hover { border-color: #f6ad55; background: rgba(246,173,85,0.06); }
+.tool-icon { font-size: 22px; width: 36px; text-align: center; }
+.tool-name { font-size: 13px; font-weight: 600; }
+.tool-desc { font-size: 11px; color: #718096; }
+footer { border-top: 1px solid #2d3748; padding: 28px 20px; text-align: center; }
+footer p { font-size: 12px; color: #4a5568; line-height: 1.8; }
+footer a { color: #718096; text-decoration: none; }
+footer a:hover { color: #f6ad55; }
+@media (max-width:600px) { .result-grid { grid-template-columns:1fr 1fr; } .inputs { grid-template-columns:1fr; } article { padding:20px 16px; } nav { display:none; } .card { padding:18px 14px; } }
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="index.html">&#9881; ENGTOOLBOX</a>
+  <nav>
+    <a href="oee-calculator.html">OEE</a>
+    <a href="takt-time-calculator.html">Takt Time</a>
+    <a href="cpk-calculator.html">Cp/Cpk</a>
+    <a href="eoq-calculator.html">EOQ</a>
+    <a href="index.html">All Tools</a>
+  </nav>
+</header>
+
+<main>
+<div class="wrap">
+
+  <section class="hero">
+    <div class="tag">Financial Analysis Calculator</div>
+    <h1>Break-Even Calculator<br><em>Break-Even Point Analysis</em></h1>
+    <p class="sub">Find the exact production volume where total revenue equals total costs. Includes live profit/loss chart and scenario table.</p>
+  </section>
+
+  <div class="card">
+    <div class="result-grid">
+      <div class="ri amber"><div class="rl">Break-Even Point</div><div class="rv" id="r-bep">200</div><div class="rs">units to break even</div></div>
+      <div class="ri teal"><div class="rl">Break-Even Revenue</div><div class="rv" id="r-rev">&#8364;10,000</div><div class="rs">total sales needed</div></div>
+      <div class="ri green"><div class="rl">Contribution Margin</div><div class="rv" id="r-cm">&#8364;25</div><div class="rs">profit per unit</div></div>
+      <div class="ri"><div class="rl">CM Ratio</div><div class="rv" id="r-cmr">50%</div><div class="rs">margin on price</div></div>
+    </div>
+
+    <div class="formula">
+      <b>BEP</b> = Fixed Costs &divide; (Price &minus; Variable Cost) = <span class="hi" id="f-fc">5,000</span> &divide; (<span class="hi" id="f-p">50</span> &minus; <span class="hi" id="f-vc">25</span>) = <b id="f-res">200 units</b>
+    </div>
+
+    <div class="section-label">Quick Examples</div>
+    <div class="presets">
+      <button class="pb" onclick="sp(5000,50,25)">Small product</button>
+      <button class="pb" onclick="sp(50000,200,120)">Medium business</button>
+      <button class="pb" onclick="sp(200000,500,300)">Large operation</button>
+      <button class="pb" onclick="sp(10000,100,40)">High margin</button>
+    </div>
+
+    <div class="inputs">
+      <div class="ig"><div class="il">Fixed Costs (FC)</div><div class="id">Rent, salaries, machinery — costs independent of volume</div><div class="irow"><div class="cur">&#8364;</div><input type="number" id="fc" value="5000" min="0" step="100" oninput="calc()"></div></div>
+      <div class="ig"><div class="il">Selling Price per Unit</div><div class="id">Revenue per unit sold</div><div class="irow"><div class="cur">&#8364;</div><input type="number" id="price" value="50" min="0.01" step="1" oninput="calc()"></div></div>
+      <div class="ig"><div class="il">Variable Cost per Unit</div><div class="id">Materials, labour — scales with each unit produced</div><div class="irow"><div class="cur">&#8364;</div><input type="number" id="vc" value="25" min="0" step="1" oninput="calc()"></div></div>
+      <div class="ig"><div class="il">Target Volume (optional)</div><div class="id">Your planned sales to see profit or loss</div><div class="irow"><input type="number" id="target" value="350" min="0" step="10" class="solo" oninput="calc()"><div style="font-size:12px;color:#718096;padding-left:8px;white-space:nowrap">units</div></div></div>
+    </div>
+
+    <div class="section-label">Explore Profit at Different Volumes</div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:13px;font-weight:600;color:#e2e8f0">Volume</span><span style="font-size:18px;font-weight:700;color:#f6ad55" id="sv">350 units</span></div>
+    <input type="range" id="slider" min="0" max="1000" value="350" step="10" oninput="syncSlider()" style="margin-bottom:16px">
+
+    <div id="pbox" style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:14px;text-align:center;margin-bottom:20px">
+      <div id="pbox-lbl" style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#22c55e;margin-bottom:4px">Profit at 350 units</div>
+      <div id="pbox-val" style="font-size:32px;font-weight:800;color:#22c55e">+&#8364;3,750</div>
+      <div id="pbox-sub" style="font-size:12px;color:#4a5568;margin-top:4px">150 units above break-even</div>
+    </div>
+
+    <div class="section-label">Revenue vs Total Cost Chart</div>
+    <div class="chart-wrap"><canvas id="chart"></canvas></div>
+    <div style="display:flex;gap:18px;flex-wrap:wrap;margin-top:8px;font-size:12px">
+      <span style="color:#22c55e">&#9644; Revenue</span>
+      <span style="color:#ef4444">&#9644; Total Cost</span>
+      <span style="color:#f6ad55">&#9644; Fixed Cost</span>
+      <span style="color:#38b2ac">| Break-even</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">Profit &amp; Loss at Key Volumes</div>
+    <table class="pl-table">
+      <thead><tr><th>Volume</th><th>Revenue</th><th>Variable Cost</th><th>Fixed Cost</th><th>Total Cost</th><th>Profit / Loss</th></tr></thead>
+      <tbody id="pl-body"></tbody>
+    </table>
+  </div>
+
+  <div class="ad-slot">&lt;!-- GOOGLE ADSENSE CODE HERE --&gt;</div>
+
+  <article>
+    <h2>What is Break-Even Analysis?</h2>
+    <p><strong>Break-even analysis</strong> determines the minimum sales volume a business needs to cover all costs — the point where total revenue equals total costs and profit is exactly zero. Below this point the business makes a loss; above it, every additional unit sold generates profit equal to the contribution margin.</p>
+
+    <h3>Break-Even Formula</h3>
+    <p><strong>BEP (units) = Fixed Costs &divide; (Selling Price &minus; Variable Cost per Unit)</strong></p>
+    <p><strong>BEP (revenue) = Fixed Costs &divide; Contribution Margin Ratio</strong></p>
+    <p>The denominator (Price &minus; Variable Cost) is the <strong>Contribution Margin</strong> — the amount each unit contributes toward covering fixed costs and generating profit.</p>
+
+    <h3>Fixed vs Variable Costs</h3>
+    <table>
+      <thead><tr><th>Cost Type</th><th>Examples</th><th>Behaviour</th></tr></thead>
+      <tbody>
+        <tr><td>Fixed Costs</td><td>Rent, salaries, insurance, depreciation</td><td>Constant regardless of volume</td></tr>
+        <tr><td>Variable Costs</td><td>Raw materials, direct labour, packaging</td><td>Increases with each unit produced</td></tr>
+        <tr><td>Total Costs</td><td>Fixed + Variable</td><td>Linear increase from fixed baseline</td></tr>
+      </tbody>
+    </table>
+
+    <h3>How to Use Break-Even in Practice</h3>
+    <ul>
+      <li><strong>New product pricing:</strong> Set a price that gives a realistic break-even at your expected sales volume</li>
+      <li><strong>Investment decisions:</strong> Evaluate whether a new machine will pay off at your production capacity</li>
+      <li><strong>Sales targets:</strong> Give your sales team a concrete minimum volume goal</li>
+      <li><strong>Risk assessment:</strong> Understand how much sales can drop before the business loses money (margin of safety)</li>
+    </ul>
+  </article>
+
+  <div class="section-label" style="margin-bottom:12px">Related Industrial Engineering Calculators</div>
+  <div class="tools-grid">
+    <a class="tool-link" href="oee-calculator.html"><span class="tool-icon">&#128200;</span><div><div class="tool-name">OEE Calculator</div><div class="tool-desc">Equipment effectiveness</div></div></a>
+    <a class="tool-link" href="eoq-calculator.html"><span class="tool-icon">&#128230;</span><div><div class="tool-name">EOQ Calculator</div><div class="tool-desc">Order quantity</div></div></a>
+    <a class="tool-link" href="safety-stock-calculator.html"><span class="tool-icon">&#128737;</span><div><div class="tool-name">Safety Stock</div><div class="tool-desc">Inventory buffer</div></div></a>
+    <a class="tool-link" href="takt-time-calculator.html"><span class="tool-icon">&#9201;</span><div><div class="tool-name">Takt Time</div><div class="tool-desc">Production pacing</div></div></a>
+    <a class="tool-link" href="cpk-calculator.html"><span class="tool-icon">&#128202;</span><div><div class="tool-name">Cp/Cpk</div><div class="tool-desc">Process capability</div></div></a>
+    <a class="tool-link" href="pert-calculator.html"><span class="tool-icon">&#128197;</span><div><div class="tool-name">PERT Calculator</div><div class="tool-desc">Project duration</div></div></a>
+  </div>
+
+  <div class="ad-slot">&lt;!-- SECOND ADSENSE UNIT HERE --&gt;</div>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong style="color:#718096">Engineering Toolbox</strong> — Free industrial engineering calculators<br>
+    <a href="index.html">All Tools</a> &middot; <a href="about.html">About</a></p>
+    <p style="margin-top:8px">For educational purposes. Always consult a financial advisor for business decisions.</p>
+  </div>
+</footer>
+
+<script>
+function fmt(n) { return '\u20ac' + Math.abs(n).toLocaleString('en-GB',{minimumFractionDigits:0,maximumFractionDigits:0}); }
+
+function sp(f,p,v) {
+  document.getElementById('fc').value=f;
+  document.getElementById('price').value=p;
+  document.getElementById('vc').value=v;
+  calc();
+}
+
+function syncSlider() {
+  var v = parseInt(document.getElementById('slider').value);
+  document.getElementById('target').value = v;
+  calc();
+}
+
+function calc() {
+  var fc    = parseFloat(document.getElementById('fc').value)||0;
+  var price = parseFloat(document.getElementById('price').value)||0.01;
+  var vc    = parseFloat(document.getElementById('vc').value)||0;
+  var tgt   = parseInt(document.getElementById('target').value)||0;
+
+  if (price <= vc) {
+    document.getElementById('r-bep').textContent = 'N/A';
+    return;
+  }
+
+  var cm   = price - vc;
+  var cmr  = cm / price;
+  var bep  = Math.ceil(fc / cm);
+  var bepR = bep * price;
+
+  document.getElementById('r-bep').textContent = bep.toLocaleString();
+  document.getElementById('r-rev').textContent = fmt(bepR);
+  document.getElementById('r-cm').textContent  = fmt(cm);
+  document.getElementById('r-cmr').textContent = (cmr*100).toFixed(1)+'%';
+  document.getElementById('f-fc').textContent  = fc.toLocaleString();
+  document.getElementById('f-p').textContent   = price;
+  document.getElementById('f-vc').textContent  = vc;
+  document.getElementById('f-res').textContent = bep.toLocaleString()+' units';
+
+  var maxU = Math.max(bep*2, 500, tgt*1.2);
+  maxU = Math.ceil(maxU/100)*100;
+  document.getElementById('slider').max   = maxU;
+  document.getElementById('slider').value = tgt;
+  document.getElementById('sv').textContent = tgt.toLocaleString()+' units';
+
+  var profit = tgt*price - (fc + tgt*vc);
+  var pbox = document.getElementById('pbox');
+  var pval = document.getElementById('pbox-val');
+  var psub = document.getElementById('pbox-sub');
+  var plbl = document.getElementById('pbox-lbl');
+  if (profit >= 0) {
+    pbox.style.background='rgba(34,197,94,0.08)'; pbox.style.borderColor='rgba(34,197,94,0.3)';
+    plbl.style.color='#22c55e'; pval.style.color='#22c55e';
+    plbl.textContent='Profit at '+tgt.toLocaleString()+' units';
+    pval.textContent='+'+fmt(profit);
+    psub.textContent=(tgt-bep).toLocaleString()+' units above break-even';
+  } else {
+    pbox.style.background='rgba(239,68,68,0.08)'; pbox.style.borderColor='rgba(239,68,68,0.3)';
+    plbl.style.color='#fc8181'; pval.style.color='#fc8181';
+    plbl.textContent='Loss at '+tgt.toLocaleString()+' units';
+    pval.textContent='-'+fmt(Math.abs(profit));
+    psub.textContent=(bep-tgt).toLocaleString()+' more units needed to break even';
+  }
+
+  // P&L table
+  var levels = [Math.floor(bep*0.25), Math.floor(bep*0.5), Math.floor(bep*0.75), bep, Math.ceil(bep*1.25), Math.ceil(bep*1.5), Math.ceil(bep*2)];
+  var html='';
+  levels.forEach(function(u){
+    var rev=u*price, varC=u*vc, tot=fc+varC, pnl=rev-tot;
+    var isBEP=(u===bep);
+    html+='<tr class="'+(isBEP?'bep-row':'')+'">'+
+      '<td>'+u.toLocaleString()+(isBEP?' &#9654; BEP':'')+'</td>'+
+      '<td>'+fmt(rev)+'</td>'+
+      '<td>'+fmt(varC)+'</td>'+
+      '<td>'+fmt(fc)+'</td>'+
+      '<td>'+fmt(tot)+'</td>'+
+      '<td class="'+(pnl>=0?'profit':'loss')+'">'+(pnl>=0?'+':'-')+fmt(pnl)+'</td>'+
+      '</tr>';
+  });
+  document.getElementById('pl-body').innerHTML=html;
+
+  drawChart(fc,price,vc,bep,maxU);
+}
+
+function drawChart(fc,price,vc,bep,maxU) {
+  var canvas=document.getElementById('chart');
+  var W=canvas.offsetWidth||800, H=canvas.offsetHeight||220;
+  canvas.width=W; canvas.height=H;
+  var ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+  var pad={t:16,r:16,b:36,l:64};
+  var cW=W-pad.l-pad.r, cH=H-pad.t-pad.b;
+  var maxY=Math.max(maxU*price, fc+maxU*vc)*1.05;
+  function xp(u){return pad.l+(u/maxU)*cW;}
+  function yp(v){return pad.t+cH-(v/maxY)*cH;}
+
+  ctx.strokeStyle='rgba(45,55,72,0.8)'; ctx.lineWidth=1;
+  for(var i=0;i<=4;i++){
+    var y=pad.t+(cH/4)*i;
+    ctx.beginPath(); ctx.moveTo(pad.l,y); ctx.lineTo(pad.l+cW,y); ctx.stroke();
+    var val=maxY*(1-i/4);
+    ctx.fillStyle='#4a5568'; ctx.font='10px monospace'; ctx.textAlign='right';
+    ctx.fillText('\u20ac'+Math.round(val/1000)+'k',pad.l-4,y+4);
+  }
+  // Fixed cost
+  ctx.beginPath(); ctx.moveTo(xp(0),yp(fc)); ctx.lineTo(xp(maxU),yp(fc));
+  ctx.strokeStyle='#f6ad55'; ctx.lineWidth=1.5; ctx.setLineDash([5,4]); ctx.stroke(); ctx.setLineDash([]);
+  // Total cost
+  ctx.beginPath(); ctx.moveTo(xp(0),yp(fc)); ctx.lineTo(xp(maxU),yp(fc+maxU*vc));
+  ctx.strokeStyle='#ef4444'; ctx.lineWidth=2; ctx.stroke();
+  // Revenue
+  ctx.beginPath(); ctx.moveTo(xp(0),yp(0)); ctx.lineTo(xp(maxU),yp(maxU*price));
+  ctx.strokeStyle='#22c55e'; ctx.lineWidth=2; ctx.stroke();
+  // BEP line
+  ctx.beginPath(); ctx.moveTo(xp(bep),pad.t); ctx.lineTo(xp(bep),pad.t+cH);
+  ctx.strokeStyle='#38b2ac'; ctx.lineWidth=1.5; ctx.setLineDash([4,3]); ctx.stroke(); ctx.setLineDash([]);
+  ctx.beginPath(); ctx.arc(xp(bep),yp(bep*price),5,0,2*Math.PI);
+  ctx.fillStyle='#38b2ac'; ctx.fill();
+  ctx.fillStyle='#38b2ac'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+  ctx.fillText('BEP: '+bep.toLocaleString()+'u',xp(bep),pad.t+12);
+  ctx.fillStyle='#4a5568'; ctx.font='10px monospace'; ctx.textAlign='center';
+  for(var i=0;i<=4;i++){
+    var u=Math.round(maxU*i/4);
+    ctx.fillText(u.toLocaleString(),xp(u),H-6);
+  }
+}
+
+calc();
+window.addEventListener('resize',calc);
+</script>
+</body>
+</html>
