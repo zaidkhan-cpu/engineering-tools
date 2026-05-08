@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Engineering Toolbox — Free Industrial Engineering Calculators</title>
+<meta name="description" content="Free online industrial engineering calculators. OEE, Takt Time, Cp/Cpk, EOQ, Safety Stock, PERT and more. Built for manufacturing and production engineers.">
+<meta name="keywords" content="industrial engineering calculators, OEE calculator, takt time calculator, lean manufacturing tools, manufacturing KPI, free engineering tools">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --navy:    #152744;
+  --navy2:   #1e3a5f;
+  --amber:   #c8821a;
+  --amber-l: #fef3e2;
+  --amber-b: #f59e0b;
+  --gray-50: #f8f9fb;
+  --gray-100:#f0f2f6;
+  --gray-200:#e2e6ed;
+  --gray-400:#94a3b8;
+  --gray-600:#64748b;
+  --gray-800:#1e293b;
+  --white:   #ffffff;
+  --shadow:  0 1px 3px rgba(21,39,68,0.08), 0 4px 16px rgba(21,39,68,0.06);
+  --shadow-md: 0 4px 24px rgba(21,39,68,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); min-height: 100vh; font-size: 15px; line-height: 1.6; }
+
+/* HEADER */
+header {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 0 var(--gray-200);
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--navy);
+  letter-spacing: -.01em;
+}
+.logo-icon {
+  width: 34px;
+  height: 34px;
+  background: var(--navy);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 17px;
+}
+.logo span { color: var(--amber); }
+nav { display: flex; align-items: center; gap: 4px; }
+nav a {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gray-600);
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all .15s;
+}
+nav a:hover { background: var(--gray-100); color: var(--navy); }
+nav a.cta {
+  background: var(--navy);
+  color: #fff;
+  padding: 7px 16px;
+  margin-left: 6px;
+}
+nav a.cta:hover { background: var(--navy2); }
+
+.wrap { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+/* HERO */
+.hero {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  padding: 72px 24px 64px;
+  text-align: center;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--amber);
+  background: var(--amber-l);
+  border: 1px solid #fcd394;
+  border-radius: 20px;
+  padding: 5px 14px;
+  margin-bottom: 24px;
+}
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(36px, 6vw, 58px);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -.02em;
+  color: var(--navy);
+  margin-bottom: 18px;
+}
+.hero h1 em { color: var(--amber); font-style: normal; }
+.hero p {
+  font-size: 17px;
+  color: var(--gray-600);
+  max-width: 520px;
+  margin: 0 auto 36px;
+  font-weight: 400;
+}
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.hs { text-align: center; }
+.hs-num { font-size: 30px; font-weight: 700; color: var(--navy); line-height: 1; }
+.hs-lbl { font-size: 12px; color: var(--gray-400); margin-top: 4px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; }
+
+/* DIVIDER LINE */
+.divider-line { width: 48px; height: 3px; background: var(--amber-b); border-radius: 2px; margin: 0 auto 12px; }
+
+/* SEARCH */
+.search-section { padding: 36px 24px 0; }
+.search-wrap {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 12px;
+  padding: 20px 24px;
+  box-shadow: var(--shadow);
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.search-inner { flex: 1; position: relative; min-width: 200px; }
+.search-inner input {
+  width: 100%;
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  padding: 10px 14px 10px 38px;
+  font-size: 14px;
+  color: var(--gray-800);
+  outline: none;
+  transition: border-color .2s;
+  font-family: 'DM Sans', sans-serif;
+}
+.search-inner input:focus { border-color: var(--amber-b); background: var(--white); }
+.search-inner input::placeholder { color: var(--gray-400); }
+.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--gray-400); font-size: 16px; pointer-events: none; }
+.filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.fb {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--gray-200);
+  background: var(--white);
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.fb:hover { border-color: var(--navy); color: var(--navy); }
+.fb.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+/* TOOLS GRID */
+.tools-section { padding: 28px 24px 48px; }
+.section-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; }
+.section-title { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--gray-400); }
+
+.tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 16px; }
+
+.tool-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 12px;
+  padding: 22px;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all .2s;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.tool-card:hover {
+  border-color: var(--navy);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+.tool-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--navy), var(--amber-b));
+  opacity: 0;
+  transition: opacity .2s;
+}
+.tool-card:hover::before { opacity: 1; }
+
+.tc-top { display: flex; align-items: center; justify-content: space-between; }
+.tc-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+.tc-live {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 20px;
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+.tc-name { font-size: 15px; font-weight: 700; color: var(--navy); }
+.tc-desc { font-size: 13px; color: var(--gray-600); line-height: 1.5; }
+.tc-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin-top: 2px;
+}
+
+/* AD SLOT */
+.ad-slot {
+  background: var(--white);
+  border: 1px dashed var(--gray-200);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  font-size: 12px;
+  font-family: monospace;
+  color: var(--gray-400);
+  margin: 0 24px 32px;
+}
+
+/* ABOUT SECTION */
+.about-section {
+  background: var(--navy);
+  padding: 64px 24px;
+  color: #fff;
+}
+.about-inner { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.about-left {}
+.about-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--amber-b); margin-bottom: 14px; }
+.about-left h2 { font-family: 'DM Serif Display', serif; font-size: clamp(26px,4vw,38px); font-weight: 400; line-height: 1.2; color: #fff; margin-bottom: 18px; }
+.about-left p { font-size: 15px; color: rgba(255,255,255,0.7); line-height: 1.8; margin-bottom: 14px; }
+.about-left p:last-child { margin-bottom: 0; }
+.about-right { display: flex; flex-direction: column; gap: 16px; }
+.about-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.about-card-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+.about-card-title { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+.about-card-desc { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5; }
+
+/* STANDARDS SECTION */
+.standards-section { background: var(--white); border-top: 1px solid var(--gray-200); border-bottom: 1px solid var(--gray-200); padding: 48px 24px; }
+.standards-inner { max-width: 1000px; margin: 0 auto; text-align: center; }
+.standards-inner h2 { font-family: 'DM Serif Display', serif; font-size: 28px; font-weight: 400; color: var(--navy); margin-bottom: 10px; }
+.standards-inner p { font-size: 14px; color: var(--gray-600); margin-bottom: 28px; }
+.standards-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.std-tag {
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  padding: 6px 14px;
+  border-radius: 6px;
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  color: var(--navy);
+  letter-spacing: .02em;
+}
+
+/* CONTACT STRIP */
+.contact-strip {
+  background: var(--gray-50);
+  border-top: 1px solid var(--gray-200);
+  padding: 40px 24px;
+  text-align: center;
+}
+.contact-strip h3 { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.contact-strip p { font-size: 14px; color: var(--gray-600); margin-bottom: 20px; }
+.linkedin-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #0a66c2;
+  color: #fff;
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background .15s;
+}
+.linkedin-btn:hover { background: #0958a8; }
+.linkedin-icon { font-size: 18px; }
+
+/* FOOTER */
+footer {
+  background: var(--navy);
+  padding: 32px 24px;
+  text-align: center;
+  color: rgba(255,255,255,0.5);
+}
+footer p { font-size: 12px; line-height: 1.8; }
+footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+footer a:hover { color: #fff; }
+footer strong { color: rgba(255,255,255,0.9); }
+
+@media (max-width:720px) {
+  header { padding: 0 16px; }
+  .about-inner { grid-template-columns: 1fr; gap: 36px; }
+  nav a:not(.cta) { display: none; }
+  .tools-grid { grid-template-columns: 1fr; }
+  .hero { padding: 48px 16px 40px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <div class="logo-icon">&#9881;</div>
+    Eng<span>Toolbox</span>
+  </a>
+  <nav>
+    <a href="index.html">Tools</a>
+    <a href="about.html">About</a>
+    <a href="https://www.linkedin.com/in/zaid-khan-595815174/" target="_blank" class="cta">LinkedIn &#8599;</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">&#9889; Free Industrial Engineering Tools</div>
+    <h1>Calculators Built for<br><em>Real Engineers</em></h1>
+    <p>Precision tools for manufacturing, lean, quality, and supply chain professionals. No login. No paywall. No nonsense.</p>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-num">10</div><div class="hs-lbl">Calculators</div></div>
+      <div class="hs"><div class="hs-num">100%</div><div class="hs-lbl">Free</div></div>
+      <div class="hs"><div class="hs-num">0</div><div class="hs-lbl">Login Required</div></div>
+    </div>
+  </section>
+
+  <!-- SEARCH + FILTER -->
+  <div class="search-section">
+    <div class="wrap">
+      <div class="search-wrap">
+        <div class="search-inner">
+          <span class="search-icon">&#128269;</span>
+          <input type="text" id="search-input" placeholder="Search calculators... (OEE, takt time, EOQ...)" oninput="filterTools()">
+        </div>
+        <div class="filters">
+          <button class="fb active" onclick="setFilter('all',this)">All</button>
+          <button class="fb" onclick="setFilter('lean',this)">Lean</button>
+          <button class="fb" onclick="setFilter('quality',this)">Quality</button>
+          <button class="fb" onclick="setFilter('supply',this)">Supply Chain</button>
+          <button class="fb" onclick="setFilter('project',this)">Project Mgmt</button>
+          <button class="fb" onclick="setFilter('financial',this)">Financial</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLS GRID -->
+  <section class="tools-section">
+    <div class="wrap">
+      <div class="section-header">
+        <div class="section-title" id="grid-label">All Calculators</div>
+        <div class="section-title" id="grid-count" style="color:#94a3b8">10 tools</div>
+      </div>
+      <div class="tools-grid" id="tools-grid">
+
+        <a class="tool-card" href="oee-calculator.html" data-cat="lean" data-name="oee overall equipment effectiveness availability performance quality">
+          <div class="tc-top"><div class="tc-icon">&#128200;</div><span class="tc-live">&#9679; Live</span></div>
+          <div class="tc-name">OEE Calculator</div>
+          <div class="tc-desc">Calculate Overall Equipment Effectiveness from Availability, Performance, and Quality with industry benchmarks.</div>
+          <div class="tc-tag">Lean Manufacturing</div>
+        </a>
+
+        <a class="tool-card" href="takt-time-calculator.html" data-cat="lean" data-name="takt time production rate demand lean line balancing">
+          <div class="tc-top"><div class="tc-icon">&#9201;</div><span class="tc-live">&#9679; Live</span></div>
+          <div class="tc-name">Takt Time Calculator</div>
+          <div class="tc-desc">Calculate production pacing time to match customer demand. Essential for lean line balancing.</div>
+          <div class="tc-tag">Lean Manufacturing</div>
+        </a>
+
+        <a class="tool-card" href="cycle-time-calculator.html" data-cat="lean" data-name="cycle time bottleneck throughput production line efficiency">
+          <div class="tc-top"><div class="tc-icon">&#128260;</div><span class="tc-live">&#9679; Live</span></div>
+          <div class="tc-name">Cycle Time Calculator</div>
+          <div class="tc-desc">Identify your production bottleneck and calculate line efficiency across all workstations.</div>
+          <div class="tc-tag">Lean Manufacturing</div>
+        </a>
+
+        <a class="tool-card" href="cpk-calculator.html" data-cat="quality" data-name="cpk cp process capability spc quality specification sigma">
+          <div class="tc-top"><div class="tc-icon">&#128202;</div><span class="tc-live">&#9679; Live</span></div>
+          <div class="tc-name">Cp / Cpk Calculator</div>
+          <div class="tc-desc">Measure process capability against specification limits with Six Sigma level interpretation and visual distribution.</div>
+          <div class="tc-tag">Quality Engineering</div>
+        </a>
+
+        <a class="tool-card" href="eoq-calculator.html" data-cat="supply" data-name="eoq economic order quantity inventory cost ordering holding">
+          <div class="tc-top"><div class="tc-icon">&#128230;</div><span class="tc-live">&#9679; Live</span></div>
+          <div class="tc-name">EOQ Calculator</div>
+          <div class="tc-desc">Find the optimal order quantity that minimises total inventory holding and ordering costs.</div>
+          <div class="tc-tag">Supply Chain</div>
+        </a>
+
+        <a class="tool-card" href="safety-stock-calculator.html" data-cat="supply" data-name="safety stock inventory buffer lead time demand service level">
+          <div class="tc-top"><div class="tc-icon">&#128737;</div><span class="tc-live">&#9679; Live</span></div>
+          <div class="tc-name">Safety Stock Calculator</div>
+          <div class="tc-desc">Calculate the optimal inventory buffer to protect against demand and lead time variability.</div>
+          <div class="tc-tag">Supply Chain</div>
+        </a>
+
+        <a class="tool-card" href="reorder-point-calculator.html" data-cat="supply" data-name="reorder point inventory replenishment stock demand lead time rop">
+          <div class="tc-top"><div class="tc-icon">&#128257;</div><span class="tc-live">&#9679; Live</span></div>
+          <div class="tc-name">Reorder Point Calculator</div>
+          <div class="tc-desc">Calculate exactly when to place a new order so inventory never runs out. Includes cycle chart.</div>
+          <div class="tc-tag">Supply Chain</div>
+        </a>
+
+        <a class="tool-card" href="pert-calculator.html" data-cat="project" data-name="pert cpm project duration estimation optimistic pessimistic">
+          <div class="tc-top"><div class="tc-icon">&#128197;</div><span class="tc-live">&#9679; Live</span></div>
+          <div class="tc-name">PERT Calculator</div>
+          <div class="tc-desc">Estimate project duration using three-point estimation. Includes multi-task project planner.</div>
+          <div class="tc-tag">Project Management</div>
+        </a>
+
+        <a class="tool-card" href="mcdm-calculator.html" data-cat="project" data-name="mcdm weighted scoring supplier selection decision criteria alternatives">
+          <div class="tc-top"><div class="tc-icon">&#9971;</div><span class="tc-live">&#9679; Live</span></div>
+          <div class="tc-name">MCDM Weighted Scoring</div>
+          <div class="tc-desc">Multi-criteria decision tool for supplier selection, project prioritisation, and option ranking.</div>
+          <div class="tc-tag">Decision Analysis</div>
+        </a>
+
+        <a class="tool-card" href="break-even-calculator.html" data-cat="financial" data-name="break even point fixed variable cost revenue pricing profit loss">
+          <div class="tc-top"><div class="tc-icon">&#9878;</div><span class="tc-live">&#9679; Live</span></div>
+          <div class="tc-name">Break-Even Calculator</div>
+          <div class="tc-desc">Find the production volume at which total revenue equals total costs. Includes live P&L chart.</div>
+          <div class="tc-tag">Financial Analysis</div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="ad-slot wrap">&lt;!-- GOOGLE ADSENSE CODE HERE --&gt;</div>
+
+  <!-- ABOUT SECTION -->
+  <section class="about-section">
+    <div class="about-inner">
+      <div class="about-left">
+        <div class="about-eyebrow">About Engineering Toolbox</div>
+        <h2>Built on Real Engineering Standards</h2>
+        <p>Every calculator on this site is grounded in internationally recognised engineering formulas — ISO 22400, APICS CPIM, AIAG SPC, and PMI PMBOK — not approximations or guesswork.</p>
+        <p>The tools were designed for working engineers who need fast, accurate answers on the shop floor, in meetings, and at their desks — without expensive software or spreadsheet hunting.</p>
+        <p>All tools are completely free, work in any browser, and require no login or installation.</p>
+      </div>
+      <div class="about-right">
+        <div class="about-card">
+          <div class="about-card-icon">&#128218;</div>
+          <div>
+            <div class="about-card-title">Formula Accuracy</div>
+            <div class="about-card-desc">Every formula is sourced from peer-reviewed standards — ISO, APICS, AIAG, PMI, and lean manufacturing literature.</div>
+          </div>
+        </div>
+        <div class="about-card">
+          <div class="about-card-icon">&#128187;</div>
+          <div>
+            <div class="about-card-title">Works Anywhere</div>
+            <div class="about-card-desc">Pure browser-based tools. No installation, no account, no data stored. Works on desktop, tablet, and mobile.</div>
+          </div>
+        </div>
+        <div class="about-card">
+          <div class="about-card-icon">&#128295;</div>
+          <div>
+            <div class="about-card-title">Built by an Engineer</div>
+            <div class="about-card-desc">Designed by a Management &amp; Industrial Systems Engineer with hands-on manufacturing and supply chain experience.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STANDARDS -->
+  <section class="standards-section">
+    <div class="standards-inner">
+      <div class="divider-line"></div>
+      <h2>Formula Sources &amp; Standards</h2>
+      <p>All calculators are based on internationally recognised engineering and management standards.</p>
+      <div class="standards-tags">
+        <span class="std-tag">ISO 22400-2</span>
+        <span class="std-tag">APICS CPIM</span>
+        <span class="std-tag">AIAG SPC Manual</span>
+        <span class="std-tag">PMI PMBOK</span>
+        <span class="std-tag">ISO 21747</span>
+        <span class="std-tag">Wilson EOQ Model</span>
+        <span class="std-tag">SAW / MCDM</span>
+        <span class="std-tag">Toyota Production System</span>
+        <span class="std-tag">Theory of Constraints</span>
+        <span class="std-tag">SEMI E10</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact-strip">
+    <h3>Questions or Feedback?</h3>
+    <p>Found a formula error or have a suggestion for a new tool? Connect on LinkedIn.</p>
+    <a class="linkedin-btn" href="https://www.linkedin.com/in/zaid-khan-595815174/" target="_blank">
+      <span class="linkedin-icon">&#128100;</span>
+      Connect on LinkedIn
+    </a>
+  </section>
+
+</main>
+
+<footer>
+  <p>
+    <strong>Engineering Toolbox</strong> — Free industrial engineering calculators<br>
+    <a href="index.html">All Tools</a> &middot; <a href="about.html">About</a> &middot; <a href="https://www.linkedin.com/in/zaid-khan-595815174/" target="_blank">LinkedIn</a>
+  </p>
+  <p style="margin-top:8px">Formulas based on ISO 22400-2, APICS, AIAG, and lean manufacturing standards. Always verify critical decisions with a qualified engineer.</p>
+</footer>
+
+<script>
+var tools = document.querySelectorAll('.tool-card');
+
+function setFilter(cat, btn) {
+  document.querySelectorAll('.fb').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  var visible = 0;
+  tools.forEach(function(t){
+    var show = cat==='all' || t.dataset.cat===cat;
+    t.style.display = show ? 'flex' : 'none';
+    if(show) visible++;
+  });
+  document.getElementById('search-input').value='';
+  document.getElementById('grid-count').textContent = visible+' tool'+(visible!==1?'s':'');
+}
+
+function filterTools() {
+  var q = document.getElementById('search-input').value.toLowerCase();
+  document.querySelectorAll('.fb').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelector('.fb').classList.add('active');
+  var visible=0;
+  tools.forEach(function(t){
+    var show = (t.dataset.name||'').indexOf(q)>-1;
+    t.style.display = show?'flex':'none';
+    if(show) visible++;
+  });
+  document.getElementById('grid-count').textContent = visible+' tool'+(visible!==1?'s':'');
+}
+</script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","name":"Engineering Toolbox","description":"Free online industrial engineering calculators for manufacturing, lean, quality, and supply chain professionals.","url":"https://bldmatrix.github.io/engineering-tools/"}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Engineering Toolbox</title>
+<meta name="description" content="Engineering Toolbox is a free collection of industrial engineering calculators built for manufacturing, lean, quality, and supply chain professionals.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --navy:    #152744;
+  --navy2:   #1e3a5f;
+  --amber:   #c8821a;
+  --amber-l: #fef3e2;
+  --amber-b: #f59e0b;
+  --gray-50: #f8f9fb;
+  --gray-100:#f0f2f6;
+  --gray-200:#e2e6ed;
+  --gray-400:#94a3b8;
+  --gray-600:#64748b;
+  --gray-800:#1e293b;
+  --white:   #ffffff;
+  --shadow:  0 1px 3px rgba(21,39,68,0.08), 0 4px 16px rgba(21,39,68,0.06);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); min-height: 100vh; font-size: 15px; line-height: 1.6; }
+
+header {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 700; font-size: 16px; color: var(--navy); }
+.logo-icon { width: 34px; height: 34px; background: var(--navy); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 17px; }
+.logo span { color: var(--amber); }
+nav { display: flex; align-items: center; gap: 4px; }
+nav a { font-size: 13px; font-weight: 500; color: var(--gray-600); text-decoration: none; padding: 6px 12px; border-radius: 6px; transition: all .15s; }
+nav a:hover { background: var(--gray-100); color: var(--navy); }
+nav a.active { color: var(--navy); font-weight: 600; }
+nav a.cta { background: var(--navy); color: #fff; padding: 7px 16px; margin-left: 6px; }
+nav a.cta:hover { background: var(--navy2); }
+
+.wrap { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+
+/* HERO */
+.hero { background: var(--white); border-bottom: 1px solid var(--gray-200); padding: 64px 24px 56px; text-align: center; }
+.hero-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--amber); background: var(--amber-l); border: 1px solid #fcd394; border-radius: 20px; padding: 5px 14px; margin-bottom: 22px; }
+.hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(32px,5vw,48px); font-weight: 400; line-height: 1.15; color: var(--navy); margin-bottom: 16px; }
+.hero h1 em { color: var(--amber); font-style: normal; }
+.hero p { font-size: 16px; color: var(--gray-600); max-width: 480px; margin: 0 auto; }
+
+.divider-line { width: 48px; height: 3px; background: var(--amber-b); border-radius: 2px; margin: 0 auto 40px; }
+
+/* CARDS */
+.content { padding: 48px 24px 64px; }
+.card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 14px;
+  padding: 32px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+.card h2 { font-family: 'DM Serif Display', serif; font-size: 24px; font-weight: 400; color: var(--navy); margin-bottom: 14px; }
+.card p { font-size: 14px; color: var(--gray-600); margin-bottom: 14px; line-height: 1.8; }
+.card p:last-child { margin-bottom: 0; }
+.card strong { color: var(--gray-800); font-weight: 600; }
+.card ul { padding-left: 20px; margin-bottom: 14px; }
+.card li { font-size: 14px; color: var(--gray-600); margin-bottom: 8px; line-height: 1.7; }
+
+/* STATS */
+.stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 24px; }
+.stat { background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 10px; padding: 20px; text-align: center; }
+.stat-num { font-size: 32px; font-weight: 800; color: var(--navy); line-height: 1; }
+.stat-label { font-size: 12px; color: var(--gray-400); margin-top: 6px; text-transform: uppercase; letter-spacing: .04em; font-weight: 500; }
+
+/* TOOLS LIST */
+.tools-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+.tool-item {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--gray-50); border: 1px solid var(--gray-200);
+  border-radius: 8px; padding: 10px 14px;
+  text-decoration: none; color: var(--gray-800);
+  transition: all .15s; font-size: 13px; font-weight: 500;
+}
+.tool-item:hover { border-color: var(--navy); background: var(--white); color: var(--navy); }
+.tool-item span { font-size: 18px; }
+
+/* STANDARDS TAGS */
+.std-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.std-tag { font-size: 12px; font-weight: 600; font-family: 'Courier New', monospace; padding: 5px 12px; border-radius: 6px; background: var(--gray-50); border: 1px solid var(--gray-200); color: var(--navy); }
+
+/* DISCLAIMER BOX */
+.disclaimer {
+  background: #fffbeb;
+  border: 1px solid #fcd394;
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 4px;
+}
+.disclaimer-icon { font-size: 20px; flex-shrink: 0; }
+.disclaimer-text { font-size: 13px; color: #92400e; line-height: 1.6; }
+
+/* CONTACT CARD */
+.contact-card {
+  background: var(--navy);
+  border-radius: 14px;
+  padding: 36px 32px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+.contact-card h2 { font-family: 'DM Serif Display', serif; font-size: 26px; font-weight: 400; color: #fff; margin-bottom: 10px; }
+.contact-card p { font-size: 14px; color: rgba(255,255,255,0.65); margin-bottom: 24px; }
+.linkedin-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: #0a66c2; color: #fff; text-decoration: none;
+  padding: 12px 28px; border-radius: 8px; font-size: 14px;
+  font-weight: 600; transition: background .15s;
+}
+.linkedin-btn:hover { background: #0958a8; }
+
+footer { background: var(--navy); padding: 32px 24px; text-align: center; color: rgba(255,255,255,0.5); }
+footer p { font-size: 12px; line-height: 1.8; }
+footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+footer a:hover { color: #fff; }
+footer strong { color: rgba(255,255,255,0.9); }
+
+@media (max-width:560px) {
+  .stats { grid-template-columns: 1fr 1fr; }
+  .tools-list { grid-template-columns: 1fr; }
+  .card { padding: 20px 16px; }
+  nav a:not(.cta) { display: none; }
+  header { padding: 0 16px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <div class="logo-icon">&#9881;</div>
+    Eng<span>Toolbox</span>
+  </a>
+  <nav>
+    <a href="index.html">All Tools</a>
+    <a href="about.html" class="active">About</a>
+    <a href="https://www.linkedin.com/in/zaid-khan-595815174/" target="_blank" class="cta">LinkedIn &#8599;</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="hero-badge">About This Site</div>
+    <h1>Built for <em>Real Engineers</em></h1>
+    <p>Free industrial engineering calculators grounded in real standards, designed for daily professional use.</p>
+  </section>
+
+  <div class="content">
+    <div class="wrap">
+
+      <div class="divider-line"></div>
+
+      <!-- STATS -->
+      <div class="stats" style="margin-bottom:20px">
+        <div class="stat"><div class="stat-num">10</div><div class="stat-label">Calculators</div></div>
+        <div class="stat"><div class="stat-num">0</div><div class="stat-label">Login Required</div></div>
+        <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Free Forever</div></div>
+      </div>
+
+      <!-- WHAT IS THIS -->
+      <div class="card">
+        <h2>What is Engineering Toolbox?</h2>
+        <p>Engineering Toolbox is a free collection of industrial engineering calculators designed for <strong>manufacturing engineers, production planners, supply chain professionals, and quality engineers</strong>. Every tool is built around standard, peer-reviewed engineering formulas.</p>
+        <p>The goal is simple: give engineers fast, accurate, browser-based tools they can use on the shop floor, in a meeting, or at their desk — without paying for software, waiting for Excel to load, or digging through textbooks for formulas.</p>
+      </div>
+
+      <!-- ALL TOOLS -->
+      <div class="card">
+        <h2>Available Calculators</h2>
+        <p>All 10 tools are free and run directly in your browser with no installation required.</p>
+        <div class="tools-list">
+          <a class="tool-item" href="oee-calculator.html"><span>&#128200;</span>OEE Calculator</a>
+          <a class="tool-item" href="takt-time-calculator.html"><span>&#9201;</span>Takt Time Calculator</a>
+          <a class="tool-item" href="cpk-calculator.html"><span>&#128202;</span>Cp / Cpk Calculator</a>
+          <a class="tool-item" href="eoq-calculator.html"><span>&#128230;</span>EOQ Calculator</a>
+          <a class="tool-item" href="safety-stock-calculator.html"><span>&#128737;</span>Safety Stock Calculator</a>
+          <a class="tool-item" href="pert-calculator.html"><span>&#128197;</span>PERT Calculator</a>
+          <a class="tool-item" href="cycle-time-calculator.html"><span>&#128260;</span>Cycle Time Calculator</a>
+          <a class="tool-item" href="break-even-calculator.html"><span>&#9878;</span>Break-Even Calculator</a>
+          <a class="tool-item" href="mcdm-calculator.html"><span>&#9971;</span>MCDM Weighted Scoring</a>
+          <a class="tool-item" href="reorder-point-calculator.html"><span>&#128257;</span>Reorder Point Calculator</a>
+        </div>
+      </div>
+
+      <!-- STANDARDS -->
+      <div class="card">
+        <h2>Formula Sources &amp; Standards</h2>
+        <p>Every calculator is based on internationally recognised engineering standards and academic references:</p>
+        <ul>
+          <li><strong>OEE</strong> — ISO 22400-2, SEMI E10, VDMA 66412</li>
+          <li><strong>Cp / Cpk</strong> — AIAG SPC Manual (4th ed.), ISO 21747</li>
+          <li><strong>Takt Time / Cycle Time</strong> — Toyota Production System, Theory of Constraints</li>
+          <li><strong>EOQ / Safety Stock / ROP</strong> — APICS CPIM, Wilson EOQ Model</li>
+          <li><strong>PERT</strong> — PMI PMBOK Guide, US Navy 1957 methodology</li>
+          <li><strong>MCDM / Weighted Scoring</strong> — Simple Additive Weighting (SAW), peer-reviewed MCDM literature</li>
+          <li><strong>Break-Even</strong> — Cost-volume-profit analysis, standard managerial accounting</li>
+        </ul>
+        <div class="std-tags">
+          <span class="std-tag">ISO 22400-2</span>
+          <span class="std-tag">APICS CPIM</span>
+          <span class="std-tag">AIAG SPC</span>
+          <span class="std-tag">PMI PMBOK</span>
+          <span class="std-tag">ISO 21747</span>
+          <span class="std-tag">Wilson EOQ</span>
+          <span class="std-tag">SAW / MCDM</span>
+          <span class="std-tag">TPS / Lean</span>
+          <span class="std-tag">SEMI E10</span>
+        </div>
+      </div>
+
+      <!-- DISCLAIMER -->
+      <div class="card">
+        <h2>Disclaimer</h2>
+        <p>All calculators are provided for <strong>educational and reference purposes</strong>. Results should always be validated by a qualified engineer before being used in production, safety-critical, or financial decisions.</p>
+        <div class="disclaimer">
+          <div class="disclaimer-icon">&#9888;</div>
+          <div class="disclaimer-text">Engineering Toolbox is not responsible for decisions made based on the output of these tools. Always verify critical calculations with your engineering team and applicable standards.</div>
+        </div>
+      </div>
+
+      <!-- CONTACT -->
+      <div class="contact-card">
+        <h2>Questions or Feedback?</h2>
+        <p>Found a formula error or have a suggestion for a new tool? Connect on LinkedIn.</p>
+        <a class="linkedin-btn" href="https://www.linkedin.com/in/zaid-khan-595815174/" target="_blank">
+          &#128100; Connect on LinkedIn
+        </a>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>
+    <strong>Engineering Toolbox</strong> — Free industrial engineering calculators<br>
+    <a href="index.html">All Tools</a> &middot; <a href="about.html">About</a> &middot; <a href="https://www.linkedin.com/in/zaid-khan-595815174/" target="_blank">LinkedIn</a>
+  </p>
+  <p style="margin-top:8px">Based on ISO 22400-2, APICS, AIAG, and lean manufacturing standards.</p>
+</footer>
+
+</body>
+</html>
