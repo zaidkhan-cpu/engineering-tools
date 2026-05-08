@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Engineering Toolbox</title>
+<meta name="description" content="Engineering Toolbox is a free collection of industrial engineering calculators built for manufacturing, lean, quality, and supply chain professionals. No login, no paywall.">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f1117; color: #e2e8f0; min-height: 100vh; font-size: 15px; line-height: 1.6; }
+header { background: #161b27; border-bottom: 1px solid #2d3748; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; position: sticky; top: 0; z-index: 100; }
+.logo { font-size: 15px; font-weight: 700; color: #f6ad55; text-decoration: none; }
+nav { display: flex; gap: 6px; flex-wrap: wrap; }
+nav a { font-size: 12px; color: #718096; text-decoration: none; padding: 4px 10px; border-radius: 6px; border: 1px solid transparent; transition: all .15s; }
+nav a:hover { border-color: #2d3748; color: #e2e8f0; background: #1a202c; }
+.wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+.hero { text-align: center; padding: 56px 0 40px; }
+.tag { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #f6ad55; background: rgba(246,173,85,0.1); border: 1px solid rgba(246,173,85,0.3); border-radius: 20px; padding: 4px 14px; margin-bottom: 18px; }
+h1 { font-size: clamp(28px,5vw,42px); font-weight: 700; margin-bottom: 14px; line-height: 1.2; }
+h1 em { color: #f6ad55; font-style: normal; }
+.sub { font-size: 16px; color: #718096; max-width: 480px; margin: 0 auto; }
+.card { background: #161b27; border: 1px solid #2d3748; border-radius: 14px; padding: 32px; margin-bottom: 20px; }
+.card h2 { font-size: 19px; font-weight: 700; margin-bottom: 14px; color: #e2e8f0; }
+.card p { font-size: 14px; color: #a0aec0; margin-bottom: 14px; line-height: 1.8; }
+.card p:last-child { margin-bottom: 0; }
+.card strong { color: #e2e8f0; }
+.card ul { padding-left: 20px; margin-bottom: 14px; }
+.card li { font-size: 14px; color: #a0aec0; margin-bottom: 8px; line-height: 1.7; }
+
+/* STATS ROW */
+.stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 20px; }
+.stat { background: #161b27; border: 1px solid #2d3748; border-radius: 12px; padding: 20px; text-align: center; }
+.stat-num { font-size: 32px; font-weight: 800; color: #f6ad55; line-height: 1; }
+.stat-label { font-size: 12px; color: #718096; margin-top: 6px; }
+
+/* TOOLS LIST */
+.tools-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+.tool-item { display: flex; align-items: center; gap: 10px; background: #1a202c; border: 1px solid #2d3748; border-radius: 8px; padding: 10px 14px; text-decoration: none; color: #e2e8f0; transition: border-color .15s; font-size: 13px; font-weight: 500; }
+.tool-item:hover { border-color: #f6ad55; background: rgba(246,173,85,0.06); }
+.tool-item span { font-size: 18px; }
+
+/* FORMULA LIST */
+.formula-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.ftag { font-size: 12px; padding: 4px 12px; border-radius: 20px; background: #1a202c; border: 1px solid #2d3748; color: #718096; font-family: 'Courier New', monospace; }
+
+/* CONTACT */
+.contact-box { background: rgba(246,173,85,0.06); border: 1px solid rgba(246,173,85,0.2); border-radius: 10px; padding: 20px; margin-top: 16px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.contact-icon { font-size: 32px; }
+.contact-text { flex: 1; }
+.contact-text p { font-size: 14px; color: #a0aec0; margin-bottom: 4px; }
+.contact-text a { color: #f6ad55; text-decoration: none; font-weight: 600; }
+.contact-text a:hover { text-decoration: underline; }
+
+footer { border-top: 1px solid #2d3748; padding: 28px 20px; text-align: center; margin-top: 20px; }
+footer p { font-size: 12px; color: #4a5568; line-height: 1.8; }
+footer a { color: #718096; text-decoration: none; }
+footer a:hover { color: #f6ad55; }
+
+@media (max-width:560px) {
+  .stats { grid-template-columns: 1fr 1fr; }
+  .tools-list { grid-template-columns: 1fr; }
+  .card { padding: 20px 16px; }
+  nav { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">&#9881; ENGTOOLBOX</a>
+  <nav>
+    <a href="index.html">All Tools</a>
+    <a href="oee-calculator.html">OEE</a>
+    <a href="takt-time-calculator.html">Takt Time</a>
+    <a href="eoq-calculator.html">EOQ</a>
+  </nav>
+</header>
+
+<main>
+<div class="wrap">
+
+  <section class="hero">
+    <div class="tag">About This Site</div>
+    <h1>Built for<br><em>Real Engineers</em></h1>
+    <p class="sub">Free industrial engineering calculators. No login. No paywall. No ads interrupting your work.</p>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat"><div class="stat-num">10</div><div class="stat-label">Free calculators</div></div>
+    <div class="stat"><div class="stat-num">0</div><div class="stat-label">Login required</div></div>
+    <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Free forever</div></div>
+  </div>
+
+  <!-- WHAT IS THIS -->
+  <div class="card">
+    <h2>What is Engineering Toolbox?</h2>
+    <p>Engineering Toolbox is a free collection of industrial engineering calculators designed for <strong>manufacturing engineers, production planners, supply chain professionals, and quality engineers</strong>. Every tool on this site is built around standard, peer-reviewed engineering formulas.</p>
+    <p>The goal is simple: give engineers fast, accurate, browser-based tools they can use on the shop floor, in a meeting, or at their desk — without paying for software, waiting for Excel to load, or digging through textbooks for formulas.</p>
+  </div>
+
+  <!-- ALL TOOLS -->
+  <div class="card">
+    <h2>Available Calculators</h2>
+    <p>All tools are free and work directly in your browser with no installation required.</p>
+    <div class="tools-list">
+      <a class="tool-item" href="oee-calculator.html"><span>&#128200;</span>OEE Calculator</a>
+      <a class="tool-item" href="takt-time-calculator.html"><span>&#9201;</span>Takt Time Calculator</a>
+      <a class="tool-item" href="cpk-calculator.html"><span>&#128202;</span>Cp / Cpk Calculator</a>
+      <a class="tool-item" href="eoq-calculator.html"><span>&#128230;</span>EOQ Calculator</a>
+      <a class="tool-item" href="safety-stock-calculator.html"><span>&#128737;</span>Safety Stock Calculator</a>
+      <a class="tool-item" href="pert-calculator.html"><span>&#128197;</span>PERT Calculator</a>
+      <a class="tool-item" href="cycle-time-calculator.html"><span>&#128260;</span>Cycle Time Calculator</a>
+      <a class="tool-item" href="break-even-calculator.html"><span>&#9878;</span>Break-Even Calculator</a>
+      <a class="tool-item" href="mcdm-calculator.html"><span>&#9971;</span>MCDM Weighted Scoring</a>
+      <a class="tool-item" href="reorder-point-calculator.html"><span>&#128257;</span>Reorder Point Calculator</a>
+    </div>
+  </div>
+
+  <!-- STANDARDS -->
+  <div class="card">
+    <h2>Formula Sources &amp; Standards</h2>
+    <p>Every calculator is based on internationally recognised engineering standards and academic references:</p>
+    <ul>
+      <li><strong>OEE</strong> — ISO 22400-2, SEMI E10, VDMA 66412</li>
+      <li><strong>Cp / Cpk</strong> — AIAG SPC Manual (4th ed.), ISO 21747</li>
+      <li><strong>Takt Time / Cycle Time</strong> — Lean manufacturing principles (Toyota Production System)</li>
+      <li><strong>EOQ / Safety Stock / ROP</strong> — APICS CPIM Body of Knowledge, Wilson EOQ model</li>
+      <li><strong>PERT</strong> — PMI PMBOK Guide, US Navy 1957 original methodology</li>
+      <li><strong>MCDM / Weighted Scoring</strong> — Simple Additive Weighting (SAW), peer-reviewed MCDM literature</li>
+      <li><strong>Break-Even</strong> — Standard managerial accounting (cost-volume-profit analysis)</li>
+    </ul>
+    <div class="formula-tags">
+      <span class="ftag">ISO 22400-2</span>
+      <span class="ftag">APICS CPIM</span>
+      <span class="ftag">AIAG SPC</span>
+      <span class="ftag">PMI PMBOK</span>
+      <span class="ftag">ISO 21747</span>
+      <span class="ftag">Wilson EOQ</span>
+      <span class="ftag">SAW / MCDM</span>
+      <span class="ftag">TPS / Lean</span>
+    </div>
+  </div>
+
+  <!-- DISCLAIMER -->
+  <div class="card">
+    <h2>Important Disclaimer</h2>
+    <p>All calculators on this site are provided for <strong>educational and reference purposes</strong>. While every effort has been made to ensure formula accuracy, results should always be validated by a qualified engineer before being used in production, safety-critical, or financial decisions.</p>
+    <p>Engineering Toolbox is not responsible for decisions made based on the output of these tools. Always verify critical calculations with your engineering team and applicable standards.</p>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="card">
+    <h2>Contact &amp; Feedback</h2>
+    <p>Found an error in a formula? Have a suggestion for a new tool? Want to report a bug?</p>
+    <div class="contact-box">
+      <div class="contact-icon">&#128100;</div>
+      <div class="contact-text">
+        <p><strong>Connect on LinkedIn</strong></p>
+        <p><a href="https://linkedin.com/in/zaid-khan" target="_blank">linkedin.com/in/zaid-khan</a></p>
+      </div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>
+      <strong style="color:#718096">Engineering Toolbox</strong> — Free industrial engineering calculators<br>
+      <a href="index.html">All Tools</a> &middot; <a href="about.html">About</a>
+    </p>
+    <p style="margin-top:8px">Formulas based on ISO 22400-2, APICS, AIAG, and lean manufacturing standards.</p>
+  </div>
+</footer>
+
+</body>
+</html>
